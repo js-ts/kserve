@@ -15,7 +15,7 @@
 import os
 
 # KFServing K8S constants
-KFSERVING_GROUP = 'serving.kubeflow.org'
+KFSERVING_GROUP = 'serving.kserve.io'
 KFSERVING_KIND = 'InferenceService'
 KFSERVING_PLURAL = 'inferenceservices'
 KFSERVING_KIND_TRAINEDMODEL = 'TrainedModel'

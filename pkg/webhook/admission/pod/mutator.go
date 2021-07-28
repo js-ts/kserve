@@ -18,12 +18,13 @@ package pod
 import (
 	"context"
 	"encoding/json"
-	v1 "k8s.io/api/core/v1"
-	k8types "k8s.io/apimachinery/pkg/types"
 	"net/http"
 
-	"github.com/kubeflow/kfserving/pkg/constants"
-	"github.com/kubeflow/kfserving/pkg/credentials"
+	v1 "k8s.io/api/core/v1"
+	k8types "k8s.io/apimachinery/pkg/types"
+
+	"github.com/kserve/kserve/pkg/constants"
+	"github.com/kserve/kserve/pkg/credentials"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"

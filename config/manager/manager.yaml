@@ -21,7 +21,7 @@ spec:
       containers:
       - command:
         - /manager
-        image: ko://github.com/kubeflow/kfserving/cmd/manager
+        image: ko://github.com/kserve/kserve/cmd/manager
         imagePullPolicy: Always
         name: manager
         env:

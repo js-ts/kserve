@@ -19,7 +19,7 @@ package v1alpha2
 import (
 	"testing"
 
-	"github.com/kubeflow/kfserving/pkg/constants"
+	"github.com/kserve/kserve/pkg/constants"
 
 	"github.com/onsi/gomega"
 	v1 "k8s.io/api/core/v1"
