@@ -32,7 +32,7 @@ import (
 // KFServing Constants
 var (
 	KFServingName           = "kfserving"
-	KFServingAPIGroupName   = "serving.kubeflow.org"
+	KFServingAPIGroupName   = "serving.kserve.io"
 	KFServingNamespace      = getEnvOrDefault("POD_NAMESPACE", "kfserving-system")
 	KFServingDefaultVersion = "v0.5.0"
 )
@@ -173,7 +173,7 @@ const (
 // Labels for TrainedModel
 const (
 	ParentInferenceServiceLabel = "inferenceservice"
-	InferenceServiceLabel       = "serving.kubeflow.org/inferenceservice"
+	InferenceServiceLabel       = "serving.kserve.io/inferenceservice"
 )
 
 // InferenceService default/canary constants

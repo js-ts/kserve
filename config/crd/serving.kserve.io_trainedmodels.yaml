@@ -6,7 +6,7 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.3.1-0.20200528125929-5c0c6ae3b64b
   creationTimestamp: null
-  name: trainedmodels.serving.kubeflow.org
+  name: trainedmodels.serving.kserve.io
 spec:
   additionalPrinterColumns:
   - JSONPath: .status.url
@@ -18,7 +18,7 @@ spec:
   - JSONPath: .metadata.creationTimestamp
     name: Age
     type: date
-  group: serving.kubeflow.org
+  group: serving.kserve.io
   names:
     kind: TrainedModel
     listKind: TrainedModelList
@@ -68,7 +68,7 @@ spec:
             address:
               properties:
                 url:
-                  type: Any
+                  type: string
               type: object
             annotations:
               additionalProperties:
@@ -78,7 +78,7 @@ spec:
               items:
                 properties:
                   lastTransitionTime:
-                    type: Any
+                    type: string
                   message:
                     type: string
                   reason:
@@ -98,7 +98,7 @@ spec:
               format: int64
               type: integer
             url:
-              type: Any
+              type: string
           type: object
       type: object
   version: v1alpha1
@@ -110,5 +110,5 @@ status:
   acceptedNames:
     kind: ""
     plural: ""
-  conditions: null
-  storedVersions: null
+  conditions: []
+  storedVersions: []

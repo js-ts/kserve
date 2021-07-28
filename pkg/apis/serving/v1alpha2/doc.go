@@ -19,7 +19,7 @@ limitations under the License.
 // +k8s:deepcopy-gen=package,register
 // +k8s:conversion-gen=kfserving/pkg/apis/serving
 // +k8s:defaulter-gen=TypeMeta
-// +groupName=serving.kubeflow.org
+// +groupName=serving.kserve.io
 package v1alpha2
 
 import (

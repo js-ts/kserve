@@ -18,10 +18,11 @@ package v1alpha2
 
 import (
 	"context"
-	"github.com/kubeflow/kfserving/pkg/constants"
-	pkgtest "github.com/kubeflow/kfserving/pkg/testing"
 	"os"
 	"testing"
+
+	"github.com/kserve/kserve/pkg/constants"
+	pkgtest "github.com/kserve/kserve/pkg/testing"
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

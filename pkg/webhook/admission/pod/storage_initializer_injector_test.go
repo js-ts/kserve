@@ -17,15 +17,16 @@ package pod
 
 import (
 	"context"
-	"k8s.io/apimachinery/pkg/api/resource"
-	"knative.dev/pkg/kmp"
 	"strings"
 	"testing"
 
-	"github.com/kubeflow/kfserving/pkg/constants"
-	"github.com/kubeflow/kfserving/pkg/credentials"
-	"github.com/kubeflow/kfserving/pkg/credentials/gcs"
-	"github.com/kubeflow/kfserving/pkg/credentials/s3"
+	"k8s.io/apimachinery/pkg/api/resource"
+	"knative.dev/pkg/kmp"
+
+	"github.com/kserve/kserve/pkg/constants"
+	"github.com/kserve/kserve/pkg/credentials"
+	"github.com/kserve/kserve/pkg/credentials/gcs"
+	"github.com/kserve/kserve/pkg/credentials/s3"
 	"github.com/onsi/gomega"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
