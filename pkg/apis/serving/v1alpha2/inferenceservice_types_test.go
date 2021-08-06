@@ -19,7 +19,7 @@ package v1alpha2
 import (
 	"testing"
 
-	"github.com/kubeflow/kfserving/pkg/constants"
+	"github.com/kserve/kserve/pkg/constants"
 
 	"github.com/onsi/gomega"
 	"golang.org/x/net/context"

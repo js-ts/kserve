@@ -170,7 +170,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - serving.kubeflow.org
+  - serving.kserve.io
   resources:
   - inferenceservices
   - inferenceservices/finalizers
@@ -183,7 +183,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - serving.kubeflow.org
+  - serving.kserve.io
   resources:
   - inferenceservices/status
   verbs:
@@ -191,7 +191,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - serving.kubeflow.org
+  - serving.kserve.io
   resources:
   - trainedmodels
   verbs:
@@ -203,7 +203,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - serving.kubeflow.org
+  - serving.kserve.io
   resources:
   - trainedmodels/status
   verbs:

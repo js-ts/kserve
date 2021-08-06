@@ -15,17 +15,18 @@ package inferenceservice
 
 import (
 	"context"
-	netv1 "k8s.io/api/networking/v1"
 	"testing"
 
-	kfservingv1alpha1 "github.com/kubeflow/kfserving/pkg/apis/serving/v1alpha1"
-	"github.com/kubeflow/kfserving/pkg/constants"
-	pkgtest "github.com/kubeflow/kfserving/pkg/testing"
+	netv1 "k8s.io/api/networking/v1"
+
+	kfservingv1alpha1 "github.com/kserve/kserve/pkg/apis/serving/v1alpha1"
+	"github.com/kserve/kserve/pkg/constants"
+	pkgtest "github.com/kserve/kserve/pkg/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	"github.com/kubeflow/kfserving/pkg/apis/serving/v1beta1"
+	"github.com/kserve/kserve/pkg/apis/serving/v1beta1"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"k8s.io/client-go/kubernetes/scheme"

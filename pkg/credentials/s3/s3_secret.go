@@ -17,8 +17,8 @@ limitations under the License.
 package s3
 
 import (
-	"github.com/kubeflow/kfserving/pkg/constants"
-	"k8s.io/api/core/v1"
+	"github.com/kserve/kserve/pkg/constants"
+	v1 "k8s.io/api/core/v1"
 )
 
 const (

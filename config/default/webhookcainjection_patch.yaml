@@ -3,7 +3,7 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: inferenceservice.serving.kubeflow.org
+  name: inferenceservice.serving.kserve.io
   annotations:
     cert-manager.io/inject-ca-from: $(kfservingNamespace)/serving-cert
 webhooks:
@@ -12,7 +12,7 @@ webhooks:
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: inferenceservice.serving.kubeflow.org
+  name: inferenceservice.serving.kserve.io
   annotations:
     cert-manager.io/inject-ca-from: $(kfservingNamespace)/serving-cert
 webhooks:
@@ -21,7 +21,7 @@ webhooks:
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: trainedmodel.serving.kubeflow.org
+  name: trainedmodel.serving.kserve.io
   annotations:
     cert-manager.io/inject-ca-from: $(kfservingNamespace)/serving-cert
 webhooks:

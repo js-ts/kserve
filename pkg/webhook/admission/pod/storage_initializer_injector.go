@@ -16,11 +16,12 @@ package pod
 import (
 	"encoding/json"
 	"fmt"
-	"k8s.io/apimachinery/pkg/api/resource"
 	"strings"
 
-	"github.com/kubeflow/kfserving/pkg/constants"
-	"github.com/kubeflow/kfserving/pkg/credentials"
+	"k8s.io/apimachinery/pkg/api/resource"
+
+	"github.com/kserve/kserve/pkg/constants"
+	"github.com/kserve/kserve/pkg/credentials"
 
 	v1 "k8s.io/api/core/v1"
 )
@@ -112,7 +113,7 @@ func (mi *StorageInitializerInjector) InjectStorageInitializer(pod *v1.Pod) erro
 	storageInitializerMounts := []v1.VolumeMount{}
 
 	// For PVC source URIs we need to mount the source to be able to access it
-	// See design and discussion here: https://github.com/kubeflow/kfserving/issues/148
+	// See design and discussion here: https://github.com/kserve/kserve/issues/148
 	if strings.HasPrefix(srcURI, PvcURIPrefix) {
 		pvcName, pvcPath, err := parsePvcURI(srcURI)
 		if err != nil {

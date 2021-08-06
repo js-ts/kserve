@@ -18,10 +18,11 @@ package service
 
 import (
 	"fmt"
-	"k8s.io/client-go/util/retry"
 	"reflect"
 	"sort"
 	"time"
+
+	"k8s.io/client-go/util/retry"
 
 	"knative.dev/pkg/network"
 
@@ -29,14 +30,14 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/kubeflow/kfserving/pkg/constants"
-	testutils "github.com/kubeflow/kfserving/pkg/testing"
+	"github.com/kserve/kserve/pkg/constants"
+	testutils "github.com/kserve/kserve/pkg/testing"
 	v1 "k8s.io/api/core/v1"
 	"knative.dev/pkg/apis"
 	knservingv1 "knative.dev/serving/pkg/apis/serving/v1"
 
-	"github.com/kubeflow/kfserving/pkg/apis/serving/v1alpha2"
-	kfserving "github.com/kubeflow/kfserving/pkg/apis/serving/v1alpha2"
+	"github.com/kserve/kserve/pkg/apis/serving/v1alpha2"
+	kfserving "github.com/kserve/kserve/pkg/apis/serving/v1alpha2"
 	. "github.com/onsi/ginkgo"
 	"github.com/onsi/gomega"
 	g "github.com/onsi/gomega"
@@ -189,7 +190,7 @@ var _ = Describe("test inference service controller", func() {
 					ConfigurationSpec: knservingv1.ConfigurationSpec{
 						Template: knservingv1.RevisionTemplateSpec{
 							ObjectMeta: metav1.ObjectMeta{
-								Labels: map[string]string{"serving.kubeflow.org/inferenceservice": serviceName,
+								Labels: map[string]string{"serving.kserve.io/inferenceservice": serviceName,
 									constants.KServiceEndpointLabel:  constants.InferenceServiceDefault,
 									constants.KServiceModelLabel:     defaultInstance.Name,
 									constants.KServiceComponentLabel: constants.Predictor.String(),
@@ -464,7 +465,7 @@ var _ = Describe("test inference service controller", func() {
 					ConfigurationSpec: knservingv1.ConfigurationSpec{
 						Template: knservingv1.RevisionTemplateSpec{
 							ObjectMeta: metav1.ObjectMeta{
-								Labels: map[string]string{"serving.kubeflow.org/inferenceservice": "bar",
+								Labels: map[string]string{"serving.kserve.io/inferenceservice": "bar",
 									constants.KServiceEndpointLabel:  constants.InferenceServiceCanary,
 									constants.KServiceModelLabel:     "bar",
 									constants.KServiceComponentLabel: constants.Predictor.String(),
@@ -1047,7 +1048,7 @@ var _ = Describe("test inference service controller", func() {
 					ConfigurationSpec: knservingv1.ConfigurationSpec{
 						Template: knservingv1.RevisionTemplateSpec{
 							ObjectMeta: metav1.ObjectMeta{
-								Labels: map[string]string{"serving.kubeflow.org/inferenceservice": serviceName,
+								Labels: map[string]string{"serving.kserve.io/inferenceservice": serviceName,
 									constants.KServiceEndpointLabel:  constants.InferenceServiceCanary,
 									constants.KServiceModelLabel:     instance.Name,
 									constants.KServiceComponentLabel: constants.Transformer.String(),
@@ -1578,7 +1579,7 @@ var _ = Describe("test inference service controller", func() {
 					ConfigurationSpec: knservingv1.ConfigurationSpec{
 						Template: knservingv1.RevisionTemplateSpec{
 							ObjectMeta: metav1.ObjectMeta{
-								Labels: map[string]string{"serving.kubeflow.org/inferenceservice": serviceName,
+								Labels: map[string]string{"serving.kserve.io/inferenceservice": serviceName,
 									constants.KServiceModelLabel:     instance.Name,
 									constants.KServiceComponentLabel: constants.Explainer.String(),
 								},

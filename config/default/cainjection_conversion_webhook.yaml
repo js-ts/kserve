@@ -5,4 +5,4 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: $(kfservingNamespace)/serving-cert
-  name: inferenceservices.serving.kubeflow.org
+  name: inferenceservices.serving.kserve.io
