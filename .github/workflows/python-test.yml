@@ -41,7 +41,7 @@ jobs:
         pip install pytest-cov
         pip install --upgrade pytest-tornasync
         cd python
-        pip install -e ./kfserving
+        pip install -e ./kserve
         pip install -e ./aixexplainer
         pip install -e ./alibiexplainer
         pip install h5py==2.9.0

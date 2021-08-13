@@ -17,7 +17,7 @@ import pytest
 
 from typing import List
 from kubernetes import client
-from kfserving import (
+from kserve import (
     constants,
     KFServingClient,
     V1beta1PredictorSpec,
@@ -31,7 +31,7 @@ from kfserving import (
 )
 
 from ..common.utils import predict, get_cluster_ip
-from ..common.utils import KFSERVING_TEST_NAMESPACE
+from ..common.utils import KSERVE_TEST_NAMESPACE
 
 KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
@@ -70,17 +70,17 @@ def test_mms_sklearn_kfserving(protocol_version: str, storage_uris: List[str]):
 
     service_name = f"isvc-sklearn-mms-{protocol_version}"
     isvc = V1beta1InferenceService(
-        api_version=constants.KFSERVING_V1BETA1,
-        kind=constants.KFSERVING_KIND,
+        api_version=constants.KSERVE_V1BETA1,
+        kind=constants.KSERVE_KIND,
         metadata=client.V1ObjectMeta(
-            name=service_name, namespace=KFSERVING_TEST_NAMESPACE
+            name=service_name, namespace=KSERVE_TEST_NAMESPACE
         ),
         spec=V1beta1InferenceServiceSpec(predictor=predictor),
     )
 
     # Create an instance of inference service with isvc
     KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KFSERVING_TEST_NAMESPACE)
+    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
 
     cluster_ip = get_cluster_ip()
 
@@ -97,10 +97,10 @@ def test_mms_sklearn_kfserving(protocol_version: str, storage_uris: List[str]):
         )
 
         model = V1alpha1TrainedModel(
-            api_version=constants.KFSERVING_V1ALPHA1,
-            kind=constants.KFSERVING_KIND_TRAINEDMODEL,
+            api_version=constants.KSERVE_V1ALPHA1,
+            kind=constants.KSERVE_KIND_TRAINEDMODEL,
             metadata=client.V1ObjectMeta(
-                name=model_name, namespace=KFSERVING_TEST_NAMESPACE
+                name=model_name, namespace=KSERVE_TEST_NAMESPACE
             ),
             spec=V1alpha1TrainedModelSpec(
                 inference_service=service_name, model=model_spec
@@ -108,13 +108,13 @@ def test_mms_sklearn_kfserving(protocol_version: str, storage_uris: List[str]):
         )
 
         # Create instances of trained models using model1 and model2
-        KFServing.create_trained_model(model, KFSERVING_TEST_NAMESPACE)
+        KFServing.create_trained_model(model, KSERVE_TEST_NAMESPACE)
 
         KFServing.wait_model_ready(
             service_name,
             model_name,
-            isvc_namespace=KFSERVING_TEST_NAMESPACE,
-            isvc_version=constants.KFSERVING_V1BETA1_VERSION,
+            isvc_namespace=KSERVE_TEST_NAMESPACE,
+            isvc_version=constants.KSERVE_V1BETA1_VERSION,
             protocol_version=protocol_version,
             cluster_ip=cluster_ip,
         )
@@ -142,8 +142,8 @@ def test_mms_sklearn_kfserving(protocol_version: str, storage_uris: List[str]):
 
     # Clean up inference service and trained models
     for model_name in model_names:
-        KFServing.delete_trained_model(model_name, KFSERVING_TEST_NAMESPACE)
-    KFServing.delete(service_name, KFSERVING_TEST_NAMESPACE)
+        KFServing.delete_trained_model(model_name, KSERVE_TEST_NAMESPACE)
+    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
 
 
 @pytest.mark.parametrize(
@@ -180,17 +180,17 @@ def test_mms_xgboost_kfserving(protocol_version: str, storage_uris: List[str]):
 
     service_name = f"isvc-xgboost-mms-{protocol_version}"
     isvc = V1beta1InferenceService(
-        api_version=constants.KFSERVING_V1BETA1,
-        kind=constants.KFSERVING_KIND,
+        api_version=constants.KSERVE_V1BETA1,
+        kind=constants.KSERVE_KIND,
         metadata=client.V1ObjectMeta(
-            name=service_name, namespace=KFSERVING_TEST_NAMESPACE
+            name=service_name, namespace=KSERVE_TEST_NAMESPACE
         ),
         spec=V1beta1InferenceServiceSpec(predictor=predictor),
     )
 
     # Create an instance of inference service with isvc
     KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KFSERVING_TEST_NAMESPACE)
+    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
 
     cluster_ip = get_cluster_ip()
     model_names = [
@@ -207,10 +207,10 @@ def test_mms_xgboost_kfserving(protocol_version: str, storage_uris: List[str]):
         )
 
         model = V1alpha1TrainedModel(
-            api_version=constants.KFSERVING_V1ALPHA1,
-            kind=constants.KFSERVING_KIND_TRAINEDMODEL,
+            api_version=constants.KSERVE_V1ALPHA1,
+            kind=constants.KSERVE_KIND_TRAINEDMODEL,
             metadata=client.V1ObjectMeta(
-                name=model_name, namespace=KFSERVING_TEST_NAMESPACE
+                name=model_name, namespace=KSERVE_TEST_NAMESPACE
             ),
             spec=V1alpha1TrainedModelSpec(
                 inference_service=service_name, model=model_spec
@@ -218,13 +218,13 @@ def test_mms_xgboost_kfserving(protocol_version: str, storage_uris: List[str]):
         )
 
         # Create instances of trained models using model1 and model2
-        KFServing.create_trained_model(model, KFSERVING_TEST_NAMESPACE)
+        KFServing.create_trained_model(model, KSERVE_TEST_NAMESPACE)
 
         KFServing.wait_model_ready(
             service_name,
             model_name,
-            isvc_namespace=KFSERVING_TEST_NAMESPACE,
-            isvc_version=constants.KFSERVING_V1BETA1_VERSION,
+            isvc_namespace=KSERVE_TEST_NAMESPACE,
+            isvc_version=constants.KSERVE_V1BETA1_VERSION,
             protocol_version=protocol_version,
             cluster_ip=cluster_ip,
         )
@@ -252,5 +252,5 @@ def test_mms_xgboost_kfserving(protocol_version: str, storage_uris: List[str]):
 
     # Clean up inference service and trained models
     for model_name in model_names:
-        KFServing.delete_trained_model(model_name, KFSERVING_TEST_NAMESPACE)
-    KFServing.delete(service_name, KFSERVING_TEST_NAMESPACE)
+        KFServing.delete_trained_model(model_name, KSERVE_TEST_NAMESPACE)
+    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)

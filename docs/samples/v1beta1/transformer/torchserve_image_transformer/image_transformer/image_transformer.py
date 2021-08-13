@@ -20,9 +20,9 @@ from typing import List, Dict
 from PIL import Image
 import torchvision.transforms as transforms
 import logging
-import kfserving
+import kserve
 
-logging.basicConfig(level=kfserving.constants.KFSERVING_LOGLEVEL)
+logging.basicConfig(level=kserve.constants.KSERVE_LOGLEVEL)
 
 
 EXPLAINER_URL_FORMAT = "http://{0}/v1/models/{1}:explain"
@@ -51,7 +51,7 @@ def image_transform(instance):
     return instance
 
 
-class ImageTransformer(kfserving.KFModel):
+class ImageTransformer(kserve.KFModel):
     """ A class object for the data handling activities of Image Classification
     Task and returns a KFServing compatible response.
 

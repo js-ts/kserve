@@ -15,16 +15,16 @@
 import os
 import numpy as np
 from kubernetes import client
-from kfserving import KFServingClient
-from kfserving import constants
-from kfserving import V1beta1PredictorSpec
-from kfserving import V1beta1TFServingSpec
-from kfserving import V1beta1InferenceServiceSpec
-from kfserving import V1beta1InferenceService
+from kserve import KFServingClient
+from kserve import constants
+from kserve import V1beta1PredictorSpec
+from kserve import V1beta1TFServingSpec
+from kserve import V1beta1InferenceServiceSpec
+from kserve import V1beta1InferenceService
 from kubernetes.client import V1ResourceRequirements
 
 from ..common.utils import predict
-from ..common.utils import KFSERVING_TEST_NAMESPACE
+from ..common.utils import KSERVE_TEST_NAMESPACE
 
 KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
@@ -42,16 +42,16 @@ def test_tensorflow_kfserving():
         )
     )
 
-    isvc = V1beta1InferenceService(api_version=constants.KFSERVING_V1BETA1,
-                                   kind=constants.KFSERVING_KIND,
+    isvc = V1beta1InferenceService(api_version=constants.KSERVE_V1BETA1,
+                                   kind=constants.KSERVE_KIND,
                                    metadata=client.V1ObjectMeta(
-                                       name=service_name, namespace=KFSERVING_TEST_NAMESPACE),
+                                       name=service_name, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor))
 
     KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KFSERVING_TEST_NAMESPACE)
+    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
     res = predict(service_name, './data/flower_input.json')
     assert(np.argmax(res["predictions"][0].get('scores')) == 0)
 
     # Delete the InferenceService
-    KFServing.delete(service_name, namespace=KFSERVING_TEST_NAMESPACE)
+    KFServing.delete(service_name, namespace=KSERVE_TEST_NAMESPACE)

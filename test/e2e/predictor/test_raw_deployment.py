@@ -14,7 +14,7 @@
 
 import os
 from kubernetes import client
-from kfserving import (
+from kserve import (
     constants,
     KFServingClient,
     V1beta1InferenceService,
@@ -24,10 +24,10 @@ from kfserving import (
 )
 from kubernetes.client import V1ResourceRequirements
 
-from ..common.utils import KFSERVING_TEST_NAMESPACE
+from ..common.utils import KSERVE_TEST_NAMESPACE
 from ..common.utils import predict
 
-api_version = constants.KFSERVING_V1BETA1
+api_version = constants.KSERVE_V1BETA1
 
 KFServing = KFServingClient(
     config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
@@ -36,7 +36,7 @@ KFServing = KFServingClient(
 def test_raw_deployment_kfserving():
     service_name = "raw-sklearn"
     annotations = dict()
-    annotations['serving.kubeflow.org/raw'] = 'true'
+    annotations['serving.kserve.io/raw'] = 'true'
     annotations['kubernetes.io/ingress.class'] = 'istio'
 
     predictor = V1beta1PredictorSpec(
@@ -51,17 +51,17 @@ def test_raw_deployment_kfserving():
     )
 
     isvc = V1beta1InferenceService(
-        api_version=constants.KFSERVING_V1BETA1,
-        kind=constants.KFSERVING_KIND,
+        api_version=constants.KSERVE_V1BETA1,
+        kind=constants.KSERVE_KIND,
         metadata=client.V1ObjectMeta(
-            name=service_name, namespace=KFSERVING_TEST_NAMESPACE,
+            name=service_name, namespace=KSERVE_TEST_NAMESPACE,
             annotations=annotations,
         ),
         spec=V1beta1InferenceServiceSpec(predictor=predictor),
     )
 
     KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KFSERVING_TEST_NAMESPACE)
+    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
     res = predict(service_name, "./data/iris_input.json")
     assert res["predictions"] == [1, 1]
-    KFServing.delete(service_name, KFSERVING_TEST_NAMESPACE)
+    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)

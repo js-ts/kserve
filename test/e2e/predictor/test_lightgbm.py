@@ -14,7 +14,7 @@
 
 import os
 from kubernetes import client
-from kfserving import (
+from kserve import (
     KFServingClient,
     constants,
     V1beta1PredictorSpec,
@@ -24,7 +24,7 @@ from kfserving import (
 )
 from kubernetes.client import V1ResourceRequirements
 
-from ..common.utils import predict, KFSERVING_TEST_NAMESPACE
+from ..common.utils import predict, KSERVE_TEST_NAMESPACE
 
 KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
@@ -43,17 +43,17 @@ def test_lightgbm_kfserving():
     )
 
     isvc = V1beta1InferenceService(
-        api_version=constants.KFSERVING_V1BETA1,
-        kind=constants.KFSERVING_KIND,
+        api_version=constants.KSERVE_V1BETA1,
+        kind=constants.KSERVE_KIND,
         metadata=client.V1ObjectMeta(
-            name=service_name, namespace=KFSERVING_TEST_NAMESPACE
+            name=service_name, namespace=KSERVE_TEST_NAMESPACE
         ),
         spec=V1beta1InferenceServiceSpec(predictor=predictor),
     )
 
     KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KFSERVING_TEST_NAMESPACE)
+    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
 
     res = predict(service_name, "./data/iris_input_v3.json")
     assert res["predictions"][0][0] > 0.5
-    KFServing.delete(service_name, KFSERVING_TEST_NAMESPACE)
+    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)

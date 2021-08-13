@@ -19,18 +19,18 @@ import time
 import logging
 from kubernetes import client
 
-from kfserving import KFServingClient
-from kfserving import constants
-from kfserving import V1beta1PredictorSpec
-from kfserving import V1beta1TransformerSpec
-from kfserving import V1beta1TorchServeSpec
-from kfserving import V1beta1InferenceServiceSpec
-from kfserving import V1beta1InferenceService
+from kserve import KFServingClient
+from kserve import constants
+from kserve import V1beta1PredictorSpec
+from kserve import V1beta1TransformerSpec
+from kserve import V1beta1TorchServeSpec
+from kserve import V1beta1InferenceServiceSpec
+from kserve import V1beta1InferenceService
 from kubernetes.client import V1ResourceRequirements
 from kubernetes.client import V1Container
 from kubernetes.client import V1EnvVar
 from ..common.utils import get_cluster_ip
-from ..common.utils import KFSERVING_TEST_NAMESPACE
+from ..common.utils import KSERVE_TEST_NAMESPACE
 logging.basicConfig(level=logging.INFO)
 KFServing = KFServingClient(
     config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
@@ -60,18 +60,18 @@ def test_transformer():
     )
 
     annotations = dict()
-    annotations['serving.kubeflow.org/raw'] = 'true'
+    annotations['serving.kserve.io/raw'] = 'true'
     annotations['kubernetes.io/ingress.class'] = 'istio'
-    isvc = V1beta1InferenceService(api_version=constants.KFSERVING_V1BETA1,
-                                   kind=constants.KFSERVING_KIND,
+    isvc = V1beta1InferenceService(api_version=constants.KSERVE_V1BETA1,
+                                   kind=constants.KSERVE_KIND,
                                    metadata=client.V1ObjectMeta(
-                                       name=service_name, namespace=KFSERVING_TEST_NAMESPACE, annotations=annotations),
+                                       name=service_name, namespace=KSERVE_TEST_NAMESPACE, annotations=annotations),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor, transformer=transformer))
 
     KFServing.create(isvc)
     try:
         KFServing.wait_isvc_ready(
-            service_name, namespace=KFSERVING_TEST_NAMESPACE)
+            service_name, namespace=KSERVE_TEST_NAMESPACE)
     except RuntimeError as e:
         raise e
 
@@ -79,7 +79,7 @@ def test_transformer():
 
     isvc = KFServing.get(
         service_name,
-        namespace=KFSERVING_TEST_NAMESPACE,
+        namespace=KSERVE_TEST_NAMESPACE,
     )
 
     cluster_ip = get_cluster_ip()
@@ -100,4 +100,4 @@ def test_transformer():
     preds = json.loads(res.content.decode("utf-8"))
     assert(preds["predictions"] == [2])
 
-    KFServing.delete(service_name, KFSERVING_TEST_NAMESPACE)
+    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)

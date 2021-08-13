@@ -16,17 +16,17 @@ import os
 import numpy as np
 from kubernetes import client
 
-from kfserving import KFServingClient
-from kfserving import constants
-from kfserving import V1beta1PredictorSpec
-from kfserving import V1beta1TransformerSpec
-from kfserving import V1beta1TorchServeSpec
-from kfserving import V1beta1InferenceServiceSpec
-from kfserving import V1beta1InferenceService
+from kserve import KFServingClient
+from kserve import constants
+from kserve import V1beta1PredictorSpec
+from kserve import V1beta1TransformerSpec
+from kserve import V1beta1TorchServeSpec
+from kserve import V1beta1InferenceServiceSpec
+from kserve import V1beta1InferenceService
 from kubernetes.client import V1ResourceRequirements
 from kubernetes.client import V1Container
 from ..common.utils import predict
-from ..common.utils import KFSERVING_TEST_NAMESPACE
+from ..common.utils import KSERVE_TEST_NAMESPACE
 
 KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
@@ -54,24 +54,24 @@ def test_transformer():
                           limits={'cpu': '100m', 'memory': '256Mi'}))]
     )
 
-    isvc = V1beta1InferenceService(api_version=constants.KFSERVING_V1BETA1,
-                                   kind=constants.KFSERVING_KIND,
+    isvc = V1beta1InferenceService(api_version=constants.KSERVE_V1BETA1,
+                                   kind=constants.KSERVE_KIND,
                                    metadata=client.V1ObjectMeta(
-                                       name=service_name, namespace=KFSERVING_TEST_NAMESPACE),
+                                       name=service_name, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor, transformer=transformer))
 
     KFServing.create(isvc)
     try:
-        KFServing.wait_isvc_ready(service_name, namespace=KFSERVING_TEST_NAMESPACE)
+        KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
     except RuntimeError as e:
-        print(KFServing.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1", KFSERVING_TEST_NAMESPACE,
+        print(KFServing.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1", KSERVE_TEST_NAMESPACE,
                                                                   "services", service_name + "-predictor-default"))
-        pods = KFServing.core_api.list_namespaced_pod(KFSERVING_TEST_NAMESPACE,
-                                                      label_selector='serving.kubeflow.org/inferenceservice={}'
+        pods = KFServing.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
+                                                      label_selector='serving.kserve.io/inferenceservice={}'
                                                       .format(service_name))
         for pod in pods.items:
             print(pod)
         raise e
     res = predict(service_name, './data/transformer.json')
     assert(np.argmax(res["predictions"]) == 3)
-    KFServing.delete(service_name, KFSERVING_TEST_NAMESPACE)
+    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
