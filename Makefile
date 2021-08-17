@@ -118,17 +118,17 @@ manifests: controller-gen
 	perl -pi -e 's/conditions: null/conditions: []/g' config/crd/serving.kserve.io_trainedmodels.yaml
 	perl -pi -e 's/Any/string/g' config/crd/serving.kserve.io_trainedmodels.yaml
 	#remove the required property on framework as name field needs to be optional
-	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.versions[1].schema.openAPIV3Schema.properties.spec.properties.*.properties.*.required'
+	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.validation.openAPIV3Schema.properties.spec.properties.*.properties.*.required'
 	#remove ephemeralContainers properties for compress crd size https://github.com/kubeflow/kfserving/pull/1141#issuecomment-714170602
-	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.versions[1].schema.openAPIV3Schema.properties.spec.properties.*.properties.ephemeralContainers'
-	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.versions[1].schema.openAPIV3Schema.properties.spec.properties.*.properties.initContainers'
+	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.validation.openAPIV3Schema.properties.spec.properties.*.properties.ephemeralContainers'
+	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.validation.openAPIV3Schema.properties.spec.properties.*.properties.initContainers'
 	#knative does not allow setting port on liveness or readiness probe
-	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.versions[1].schema.openAPIV3Schema.properties.spec.properties.*.properties.*.properties.readinessProbe.properties.httpGet.required'
-	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.versions[1].schema.openAPIV3Schema.properties.spec.properties.*.properties.*.properties.livenessProbe.properties.httpGet.required'
-	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.versions[1].schema.openAPIV3Schema.properties.spec.properties.*.properties.*.properties.readinessProbe.properties.tcpSocket.required'
-	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.versions[1].schema.openAPIV3Schema.properties.spec.properties.*.properties.*.properties.livenessProbe.properties.tcpSocket.required'
-	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.versions[1].schema.openAPIV3Schema.properties.spec.properties.*.properties.containers.items.properties.livenessProbe.properties.httpGet.required'
-	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.versions[1].schema.openAPIV3Schema.properties.spec.properties.*.properties.containers.items.properties.readinessProbe.properties.httpGet.required'
+	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.validation.openAPIV3Schema.properties.spec.properties.*.properties.*.properties.readinessProbe.properties.httpGet.required'
+	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.validation.openAPIV3Schema.properties.spec.properties.*.properties.*.properties.livenessProbe.properties.httpGet.required'
+	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.validation.openAPIV3Schema.properties.spec.properties.*.properties.*.properties.readinessProbe.properties.tcpSocket.required'
+	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.validation.openAPIV3Schema.properties.spec.properties.*.properties.*.properties.livenessProbe.properties.tcpSocket.required'
+	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.validation.openAPIV3Schema.properties.spec.properties.*.properties.containers.items.properties.livenessProbe.properties.httpGet.required'
+	yq d -i config/crd/serving.kserve.io_inferenceservices.yaml 'spec.validation.openAPIV3Schema.properties.spec.properties.*.properties.containers.items.properties.readinessProbe.properties.httpGet.required'
 	kustomize build config/crd > test/crds/serving.kserve.io_inferenceservices.yaml
 
 # Run go fmt against code

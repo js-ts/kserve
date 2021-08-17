@@ -7,19 +7,6 @@ metadata:
   name: kserve-manager-role
 rules:
 - apiGroups:
-  - admissionregistration.k8s.io
-  resources:
-  - mutatingwebhookconfigurations
-  - validatingwebhookconfigurations
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
   - apps
   resources:
   - deployments
@@ -117,14 +104,6 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
-  - networking.istio.io
-  resources:
-  - virtualservices/status
-  verbs:
-  - get
-  - patch
-  - update
 - apiGroups:
   - networking.k8s.io
   resources:
