@@ -23,7 +23,7 @@ from kserve import constants
 
 logging.basicConfig(level=logging.INFO)
 
-KSERVE_NAMESPACE = "kfserving-system"
+KSERVE_NAMESPACE = "kserve"
 KSERVE_TEST_NAMESPACE = "kfserving-ci-e2e-test"
 
 

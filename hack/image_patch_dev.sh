@@ -10,7 +10,7 @@ apiVersion: apps/v1
 kind: StatefulSet 
 metadata:
   name: kfserving-controller-manager
-  namespace: kfserving-system
+  namespace: kserve
 spec:
   template:
     spec:
@@ -28,7 +28,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: inferenceservice-config
-  namespace: kfserving-system
+  namespace: kserve
 data:
   logger: |-
     {

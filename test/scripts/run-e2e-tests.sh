@@ -120,7 +120,7 @@ sed -i -e "s/latest/${PULL_BASE_SHA}/g" config/overlays/test/manager_image_patch
 make deploy-ci
 
 echo "Waiting for KFServing started ..."
-kubectl wait --for=condition=Ready pods --all --timeout=180s -n kfserving-system
+kubectl wait --for=condition=Ready pods --all --timeout=180s -n kserve
 
 echo "Creating a namespace kfserving-ci-test ..."
 kubectl create namespace kfserving-ci-e2e-test

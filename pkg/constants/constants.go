@@ -33,7 +33,7 @@ import (
 var (
 	KFServingName           = "kfserving"
 	KFServingAPIGroupName   = "serving.kserve.io"
-	KFServingNamespace      = getEnvOrDefault("POD_NAMESPACE", "kfserving-system")
+	KFServingNamespace      = getEnvOrDefault("POD_NAMESPACE", "kserve")
 	KFServingDefaultVersion = "v0.5.0"
 )
 

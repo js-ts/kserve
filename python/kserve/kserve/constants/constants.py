@@ -32,7 +32,7 @@ KSERVE_LOGLEVEL = os.environ.get('KSERVE_LOGLEVEL', 'INFO').upper()
 
 # INFERENCESERVICE credentials common constants
 INFERENCESERVICE_CONFIG_MAP_NAME = 'inferenceservice-config'
-INFERENCESERVICE_SYSTEM_NAMESPACE = 'kfserving-system'
+INFERENCESERVICE_SYSTEM_NAMESPACE = 'kserve'
 DEFAULT_SECRET_NAME = "kfserving-secret-"
 DEFAULT_SA_NAME = "kfserving-service-credentials"
 
