@@ -25,7 +25,7 @@ patchesJson6902:
     version: v1beta1
     kind: VirtualService
     name: kfserving-models-web-app
-    namespace: kfserving-system
+    namespace: kserve
   path: patches/web-app-vsvc.yaml
 
 generatorOptions:

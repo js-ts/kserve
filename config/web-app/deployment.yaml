@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kfserving-models-web-app
-  namespace: kfserving-system
+  namespace: kserve
 spec:
   replicas: 1
   selector:

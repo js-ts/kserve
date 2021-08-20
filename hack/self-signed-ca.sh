@@ -14,7 +14,7 @@ The server key/cert CA cert are stored in a k8s secret.
 usage: ${0} [OPTIONS]
 The following flags are optional.
        --service           Service name of webhook. Default: kfserving-webhook-server-service
-       --namespace         Namespace where webhook service and secret reside. Default: kfserving-system
+       --namespace         Namespace where webhook service and secret reside. Default: kserve
        --secret            Secret name for CA certificate and server certificate/key pair. Default: kfserving-webhook-server-cert
        --webhookName       Name for the mutating and validating webhook config. Default: inferenceservice.serving.kserve.io
        --webhookDeployment Statefulset name of the webhook controller. Default: kfserving-controller-manager
@@ -51,7 +51,7 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 [ -z ${secret} ] && secret=kfserving-webhook-server-cert
-[ -z ${namespace} ] && namespace=kfserving-system
+[ -z ${namespace} ] && namespace=kserve
 [ -z ${webhookDeployment} ] && webhookDeployment=kfserving-controller-manager
 [ -z ${webhookName} ] && webhookName=inferenceservice.serving.kserve.io
 [ -z ${service} ] && service=kfserving-webhook-server-service
