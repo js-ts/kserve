@@ -9,10 +9,10 @@ webhooks:
       caBundle: Cg==
       service:
         name: $(webhookServiceName)
-        namespace: $(kfservingNamespace)
+        namespace: $(kserveNamespace)
         path: /mutate-serving-kserve-io-v1alpha2-inferenceservice
     failurePolicy: Fail
-    name: inferenceservice.kfserving-webhook-server.defaulter
+    name: inferenceservice.kserve-webhook-server.defaulter
     rules:
       - apiGroups:
           - serving.kserve.io
@@ -27,10 +27,10 @@ webhooks:
       caBundle: Cg==
       service:
         name: $(webhookServiceName)
-        namespace: $(kfservingNamespace)
+        namespace: $(kserveNamespace)
         path: /mutate-serving-kserve-io-v1beta1-inferenceservice
     failurePolicy: Fail
-    name: inferenceservice.kfserving-webhook-server.v1beta1.defaulter
+    name: inferenceservice.kserve-webhook-server.v1beta1.defaulter
     rules:
       - apiGroups:
           - serving.kserve.io
@@ -45,10 +45,10 @@ webhooks:
       caBundle: Cg==
       service:
         name: $(webhookServiceName)
-        namespace: $(kfservingNamespace)
+        namespace: $(kserveNamespace)
         path: /mutate-pods
     failurePolicy: Fail
-    name: inferenceservice.kfserving-webhook-server.pod-mutator
+    name: inferenceservice.kserve-webhook-server.pod-mutator
     namespaceSelector:
       matchExpressions:
         - key: control-plane
@@ -79,10 +79,10 @@ webhooks:
       caBundle: Cg==
       service:
         name: $(webhookServiceName)
-        namespace: $(kfservingNamespace)
+        namespace: $(kserveNamespace)
         path: /validate-serving-kserve-io-v1alpha2-inferenceservice
     failurePolicy: Fail
-    name: inferenceservice.kfserving-webhook-server.validator
+    name: inferenceservice.kserve-webhook-server.validator
     rules:
       - apiGroups:
           - serving.kserve.io
@@ -97,10 +97,10 @@ webhooks:
       caBundle: Cg==
       service:
         name: $(webhookServiceName)
-        namespace: $(kfservingNamespace)
+        namespace: $(kserveNamespace)
         path: /validate-serving-kserve-io-v1beta1-inferenceservice
     failurePolicy: Fail
-    name: inferenceservice.kfserving-webhook-server.v1beta1.validator
+    name: inferenceservice.kserve-webhook-server.v1beta1.validator
     rules:
       - apiGroups:
           - serving.kserve.io
@@ -122,10 +122,10 @@ webhooks:
       caBundle: Cg==
       service:
         name: $(webhookServiceName)
-        namespace: $(kfservingNamespace)
+        namespace: $(kserveNamespace)
         path: /validate-serving-kserve-io-v1alpha1-trainedmodel
     failurePolicy: Fail
-    name: trainedmodel.kfserving-webhook-server.validator
+    name: trainedmodel.kserve-webhook-server.validator
     rules:
       - apiGroups:
           - serving.kserve.io
