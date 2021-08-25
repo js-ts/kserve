@@ -1,7 +1,7 @@
 HAS_LINT := $(shell command -v golint;)
 
 # Image URL to use all building/pushing image targets
-IMG ?= kfserving-controller:latest
+IMG ?= kserve-controller:latest
 AGENT_IMG ?= agent:latest
 SKLEARN_IMG ?= sklearnserver
 XGB_IMG ?= xgbserver
