@@ -1,4 +1,4 @@
-name: Alibi Explainer Docker Publisher
+name: Kserve controller Docker Publisher
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
   pull_request:
 
 env:
-  IMAGE_NAME: alibi-explainer 
+  IMAGE_NAME: kserve-controller
 
 jobs:
   # Run tests.
@@ -31,8 +31,7 @@ jobs:
             docker-compose --file docker-compose.test.yml build
             docker-compose --file docker-compose.test.yml run sut
           else
-            cd python
-            docker build . --file alibiexplainer.Dockerfile
+            docker build . --file Dockerfile
           fi
 
   # Push image to GitHub Packages.
@@ -49,8 +48,7 @@ jobs:
 
       - name: Build image
         run: |
-          cd python
-          docker build . --file alibiexplainer.Dockerfile --tag $IMAGE_NAME
+          docker build . --file Dockerfile --tag $IMAGE_NAME
 
       - name: Log into registry
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
