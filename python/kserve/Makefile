@@ -8,4 +8,4 @@ test:
 	pytest -W ignore
 
 type_check:
-	mypy --ignore-missing-imports kfserving
+	mypy --ignore-missing-imports kserve
