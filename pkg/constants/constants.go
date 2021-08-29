@@ -31,7 +31,7 @@ import (
 
 // KFServing Constants
 var (
-	KFServingName           = "kfserving"
+	KFServingName           = "kserve"
 	KFServingAPIGroupName   = "serving.kserve.io"
 	KFServingNamespace      = getEnvOrDefault("POD_NAMESPACE", "kserve")
 	KFServingDefaultVersion = "v0.5.0"
@@ -194,7 +194,7 @@ const (
 
 // InferenceService container name
 const (
-	InferenceServiceContainerName = "kfserving-container"
+	InferenceServiceContainerName = "kserve-container"
 )
 
 // DefaultModelLocalMountPath is where models will be mounted by the storage-initializer
