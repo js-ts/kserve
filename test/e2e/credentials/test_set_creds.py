@@ -68,7 +68,7 @@ def test_set_credentials_s3():
     if check_sa_exists(sa_name):
         delete_sa(sa_name)
 
-    kserve.set_credentials(storage_type='s3',
+    kfserving.set_credentials(storage_type='s3',
                               namespace=KSERVE_TEST_NAMESPACE,
                               credentials_file=credentials_file,
                               s3_profile='default',

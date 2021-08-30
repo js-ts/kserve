@@ -49,7 +49,7 @@ def test_triton():
                                                                   "services", service_name + "-predictor-default"))
         deployments = KFServing.app_api. \
             list_namespaced_deployment(KSERVE_TEST_NAMESPACE, label_selector='serving.kserve.io/'
-                                                                                'inferenceservice={}'.
+                                       'inferenceservice={}'.
                                        format(service_name))
         for deployment in deployments.items:
             print(deployment)
