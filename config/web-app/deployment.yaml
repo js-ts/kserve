@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/component: kserve-models-web-app
     spec:
       containers:
-      - image: andyarok/models-web-app:latest
+      - image: kserve/models-web-app:latest
         imagePullPolicy: Always
         name: kserve-models-web-app
         envFrom:
