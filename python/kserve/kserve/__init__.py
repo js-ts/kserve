@@ -21,7 +21,7 @@ from kserve.utils import utils
 from kserve.handlers import http
 
 # import client apis into kfserving package
-from kserve.api.kf_serving_client import KFServingClient
+from kserve.api.kf_serving_client import KServeClient
 from kserve.constants import constants
 
 # import ApiClient

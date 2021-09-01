@@ -157,7 +157,7 @@ func TestStorageInitializerInjector(t *testing.T) {
 							Name: constants.InferenceServiceContainerName,
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 									ReadOnly:  true,
 								},
@@ -173,7 +173,7 @@ func TestStorageInitializerInjector(t *testing.T) {
 							TerminationMessagePolicy: "FallbackToLogsOnError",
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 								},
 							},
@@ -181,7 +181,7 @@ func TestStorageInitializerInjector(t *testing.T) {
 					},
 					Volumes: []v1.Volume{
 						{
-							Name: "kfserving-provision-location",
+							Name: "kserve-provision-location",
 							VolumeSource: v1.VolumeSource{
 								EmptyDir: &v1.EmptyDirVolumeSource{},
 							},
@@ -217,12 +217,12 @@ func TestStorageInitializerInjector(t *testing.T) {
 							Name: constants.InferenceServiceContainerName,
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-pvc-source",
+									Name:      "kserve-pvc-source",
 									MountPath: "/mnt/pvc",
 									ReadOnly:  true,
 								},
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 									ReadOnly:  true,
 								},
@@ -238,12 +238,12 @@ func TestStorageInitializerInjector(t *testing.T) {
 							TerminationMessagePolicy: "FallbackToLogsOnError",
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-pvc-source",
+									Name:      "kserve-pvc-source",
 									MountPath: "/mnt/pvc",
 									ReadOnly:  true,
 								},
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 								},
 							},
@@ -251,7 +251,7 @@ func TestStorageInitializerInjector(t *testing.T) {
 					},
 					Volumes: []v1.Volume{
 						{
-							Name: "kfserving-pvc-source",
+							Name: "kserve-pvc-source",
 							VolumeSource: v1.VolumeSource{
 								PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
 									ClaimName: "mypvcname",
@@ -260,7 +260,7 @@ func TestStorageInitializerInjector(t *testing.T) {
 							},
 						},
 						{
-							Name: "kfserving-provision-location",
+							Name: "kserve-provision-location",
 							VolumeSource: v1.VolumeSource{
 								EmptyDir: &v1.EmptyDirVolumeSource{},
 							},
@@ -501,7 +501,7 @@ func TestCredentialInjection(t *testing.T) {
 							Name: constants.InferenceServiceContainerName,
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 									ReadOnly:  true,
 								},
@@ -517,7 +517,7 @@ func TestCredentialInjection(t *testing.T) {
 							TerminationMessagePolicy: "FallbackToLogsOnError",
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 								},
 							},
@@ -557,7 +557,7 @@ func TestCredentialInjection(t *testing.T) {
 					},
 					Volumes: []v1.Volume{
 						{
-							Name: "kfserving-provision-location",
+							Name: "kserve-provision-location",
 							VolumeSource: v1.VolumeSource{
 								EmptyDir: &v1.EmptyDirVolumeSource{},
 							},
@@ -601,7 +601,7 @@ func TestCredentialInjection(t *testing.T) {
 							Name: constants.InferenceServiceContainerName,
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 									ReadOnly:  true,
 								},
@@ -617,7 +617,7 @@ func TestCredentialInjection(t *testing.T) {
 							TerminationMessagePolicy: "FallbackToLogsOnError",
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 								},
 								{
@@ -636,7 +636,7 @@ func TestCredentialInjection(t *testing.T) {
 					},
 					Volumes: []v1.Volume{
 						{
-							Name: "kfserving-provision-location",
+							Name: "kserve-provision-location",
 							VolumeSource: v1.VolumeSource{
 								EmptyDir: &v1.EmptyDirVolumeSource{},
 							},
@@ -720,7 +720,7 @@ func TestStorageInitializerConfigmap(t *testing.T) {
 							Name: constants.InferenceServiceContainerName,
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 									ReadOnly:  true,
 								},
@@ -736,7 +736,7 @@ func TestStorageInitializerConfigmap(t *testing.T) {
 							TerminationMessagePolicy: "FallbackToLogsOnError",
 							VolumeMounts: []v1.VolumeMount{
 								{
-									Name:      "kfserving-provision-location",
+									Name:      "kserve-provision-location",
 									MountPath: constants.DefaultModelLocalMountPath,
 								},
 							},
@@ -744,7 +744,7 @@ func TestStorageInitializerConfigmap(t *testing.T) {
 					},
 					Volumes: []v1.Volume{
 						{
-							Name: "kfserving-provision-location",
+							Name: "kserve-provision-location",
 							VolumeSource: v1.VolumeSource{
 								EmptyDir: &v1.EmptyDirVolumeSource{},
 							},

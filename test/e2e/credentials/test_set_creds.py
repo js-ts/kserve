@@ -104,9 +104,9 @@ def test_set_credentials_gcp():
     kserve_client = KServeClient()
     sa_name = constants.DEFAULT_SA_NAME
     kserve_client.set_credentials(storage_type='gcs',
-                              namespace=KSERVE_TEST_NAMESPACE,
-                              credentials_file='./credentials/gcp_credentials.json',
-                              sa_name=sa_name)
+                                  namespace=KSERVE_TEST_NAMESPACE,
+                                  credentials_file='./credentials/gcp_credentials.json',
+                                  sa_name=sa_name)
     created_sa = get_created_sa(sa_name)
     created_secret_name = created_sa.secrets[0].name
     created_secret = get_created_secret(created_secret_name)
@@ -118,9 +118,9 @@ def test_azure_credentials():
     kserve_client = KServeClient()
     sa_name = constants.DEFAULT_SA_NAME
     kserve_client.set_credentials(storage_type='Azure',
-                              namespace=KSERVE_TEST_NAMESPACE,
-                              credentials_file='./credentials/azure_credentials.json',
-                              sa_name=sa_name)
+                                  namespace=KSERVE_TEST_NAMESPACE,
+                                  credentials_file='./credentials/azure_credentials.json',
+                                  sa_name=sa_name)
     created_sa = get_created_sa(sa_name)
     created_secret_name = created_sa.secrets[0].name
     created_secret = get_created_secret(created_secret_name)

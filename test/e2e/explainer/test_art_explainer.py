@@ -63,11 +63,11 @@ def test_tabular_explainer():
         kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE, timeout_seconds=720)
     except RuntimeError as e:
         logging.info(kserve_client.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1",
-                                                                         KSERVE_TEST_NAMESPACE, "services",
-                                                                         service_name + "-predictor-default"))
+                                                                             KSERVE_TEST_NAMESPACE, "services",
+                                                                             service_name + "-predictor-default"))
         pods = kserve_client.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
-                                                      label_selector='serving.kserve.io/inferenceservice={}'.
-                                                      format(service_name))
+                                                          label_selector='serving.kserve.io/inferenceservice={}'.
+                                                          format(service_name))
         for pod in pods.items:
             logging.info(pod)
         raise e

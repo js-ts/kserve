@@ -83,7 +83,7 @@ def test_inferenceservice_client_watch():
     with patch('kserve.api.kf_serving_client.KServeClient.get',
                return_value=mocked_unit_result):
         assert mocked_unit_result == kserve_client.get('flower-sample', namespace='kubeflow',
-                                                   watch=True, timeout_seconds=120)
+                                                       watch=True, timeout_seconds=120)
 
 
 def test_inferenceservice_client_patch():

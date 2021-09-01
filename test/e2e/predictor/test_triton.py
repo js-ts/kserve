@@ -45,8 +45,9 @@ def test_triton():
     try:
         kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
     except RuntimeError as e:
-        print(kserve_client.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1", KSERVE_TEST_NAMESPACE,
-                                                                  "services", service_name + "-predictor-default"))
+        print(kserve_client.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1",
+                                                                      KSERVE_TEST_NAMESPACE,
+                                                                      "services", service_name + "-predictor-default"))
         deployments = kserve_client.app_api. \
             list_namespaced_deployment(KSERVE_TEST_NAMESPACE, label_selector='serving.kserve.io/'
                                        'inferenceservice={}'.
