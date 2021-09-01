@@ -19,7 +19,7 @@ from typing import List
 from kubernetes import client
 from kserve import (
     constants,
-    KFServingClient,
+    KServeClient,
     V1beta1PredictorSpec,
     V1alpha1TrainedModel,
     V1beta1InferenceService,
@@ -33,7 +33,7 @@ from kserve import (
 from ..common.utils import predict, get_cluster_ip
 from ..common.utils import KSERVE_TEST_NAMESPACE
 
-KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
+kserve_client = KServeClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
 @pytest.mark.parametrize(
@@ -55,7 +55,7 @@ KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/co
         ),
     ],
 )
-def test_mms_sklearn_kfserving(protocol_version: str, storage_uris: List[str]):
+def test_mms_sklearn_kserve(protocol_version: str, storage_uris: List[str]):
     # Define an inference service
     predictor = V1beta1PredictorSpec(
         min_replicas=1,
@@ -79,8 +79,8 @@ def test_mms_sklearn_kfserving(protocol_version: str, storage_uris: List[str]):
     )
 
     # Create an instance of inference service with isvc
-    KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.create(isvc)
+    kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
 
     cluster_ip = get_cluster_ip()
 
@@ -108,9 +108,9 @@ def test_mms_sklearn_kfserving(protocol_version: str, storage_uris: List[str]):
         )
 
         # Create instances of trained models using model1 and model2
-        KFServing.create_trained_model(model, KSERVE_TEST_NAMESPACE)
+        kserve_client.create_trained_model(model, KSERVE_TEST_NAMESPACE)
 
-        KFServing.wait_model_ready(
+        kserve_client.wait_model_ready(
             service_name,
             model_name,
             isvc_namespace=KSERVE_TEST_NAMESPACE,
@@ -142,8 +142,8 @@ def test_mms_sklearn_kfserving(protocol_version: str, storage_uris: List[str]):
 
     # Clean up inference service and trained models
     for model_name in model_names:
-        KFServing.delete_trained_model(model_name, KSERVE_TEST_NAMESPACE)
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
+        kserve_client.delete_trained_model(model_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)
 
 
 @pytest.mark.parametrize(
@@ -165,7 +165,7 @@ def test_mms_sklearn_kfserving(protocol_version: str, storage_uris: List[str]):
         ),
     ],
 )
-def test_mms_xgboost_kfserving(protocol_version: str, storage_uris: List[str]):
+def test_mms_xgboost_kserve(protocol_version: str, storage_uris: List[str]):
     # Define an inference service
     predictor = V1beta1PredictorSpec(
         min_replicas=1,
@@ -189,8 +189,8 @@ def test_mms_xgboost_kfserving(protocol_version: str, storage_uris: List[str]):
     )
 
     # Create an instance of inference service with isvc
-    KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.create(isvc)
+    kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
 
     cluster_ip = get_cluster_ip()
     model_names = [
@@ -218,9 +218,9 @@ def test_mms_xgboost_kfserving(protocol_version: str, storage_uris: List[str]):
         )
 
         # Create instances of trained models using model1 and model2
-        KFServing.create_trained_model(model, KSERVE_TEST_NAMESPACE)
+        kserve_client.create_trained_model(model, KSERVE_TEST_NAMESPACE)
 
-        KFServing.wait_model_ready(
+        kserve_client.wait_model_ready(
             service_name,
             model_name,
             isvc_namespace=KSERVE_TEST_NAMESPACE,
@@ -252,5 +252,5 @@ def test_mms_xgboost_kfserving(protocol_version: str, storage_uris: List[str]):
 
     # Clean up inference service and trained models
     for model_name in model_names:
-        KFServing.delete_trained_model(model_name, KSERVE_TEST_NAMESPACE)
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
+        kserve_client.delete_trained_model(model_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)

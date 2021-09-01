@@ -26,7 +26,7 @@ setup(
     version='0.6.0',
     author_email='linyiming@ainnovation.com',
     license='../../LICENSE.txt',
-    url='https://github.com/kubeflow/kfserving/python/kfserving/lgbserver',
+    url='https://github.com/kserve/kserve/python/lgbserver',
     description='Model Server implementation for LightGBM. \
                  Not intended for use outside KFServing Frameworks Images',
     long_description=open('README.md').read(),

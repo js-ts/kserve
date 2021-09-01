@@ -16,7 +16,7 @@ import os
 from kubernetes import client
 from kserve import (
     constants,
-    KFServingClient,
+    KServeClient,
     V1beta1InferenceService,
     V1beta1InferenceServiceSpec,
     V1beta1PredictorSpec,
@@ -29,11 +29,11 @@ from ..common.utils import predict
 
 api_version = constants.KSERVE_V1BETA1
 
-KFServing = KFServingClient(
+kserve_client = KServeClient(
     config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
-def test_raw_deployment_kfserving():
+def test_raw_deployment_kserve():
     service_name = "raw-sklearn"
     annotations = dict()
     annotations['serving.kserve.io/raw'] = 'true'
@@ -60,8 +60,8 @@ def test_raw_deployment_kfserving():
         spec=V1beta1InferenceServiceSpec(predictor=predictor),
     )
 
-    KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.create(isvc)
+    kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
     res = predict(service_name, "./data/iris_input.json")
     assert res["predictions"] == [1, 1]
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)

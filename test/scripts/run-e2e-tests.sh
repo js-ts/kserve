@@ -122,8 +122,8 @@ make deploy-ci
 echo "Waiting for KFServing started ..."
 kubectl wait --for=condition=Ready pods --all --timeout=180s -n kserve
 
-echo "Creating a namespace kfserving-ci-test ..."
-kubectl create namespace kfserving-ci-e2e-test
+echo "Creating a namespace kserve-ci-test ..."
+kubectl create namespace kserve-ci-e2e-test
 
 echo "Istio, Knative and KFServing have been installed and started."
 

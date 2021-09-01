@@ -47,7 +47,7 @@ var (
 	StorageUriProtocols = strings.Join(storage.GetAllProtocol(), CommaSpaceSeparator)
 )
 
-// +kubebuilder:webhook:verbs=create;update,path=/validate-trainedmodel,mutating=false,failurePolicy=fail,groups=serving.kserve.io,resources=trainedmodels,versions=v1alpha1,name=trainedmodel.kfserving-webhook-server.validator
+// +kubebuilder:webhook:verbs=create;update,path=/validate-trainedmodel,mutating=false,failurePolicy=fail,groups=serving.kserve.io,resources=trainedmodels,versions=v1alpha1,name=trainedmodel.kserve-webhook-server.validator
 
 var _ webhook.Validator = &TrainedModel{}
 

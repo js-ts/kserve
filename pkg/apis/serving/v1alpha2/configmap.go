@@ -96,7 +96,7 @@ type InferenceServicesConfig struct {
 
 func GetInferenceServicesConfig(client client.Client) (*InferenceServicesConfig, error) {
 	configMap := &v1.ConfigMap{}
-	err := client.Get(context.TODO(), types.NamespacedName{Name: constants.InferenceServiceConfigMapName, Namespace: constants.KFServingNamespace}, configMap)
+	err := client.Get(context.TODO(), types.NamespacedName{Name: constants.InferenceServiceConfigMapName, Namespace: constants.KServeNamespace}, configMap)
 	if err != nil {
 		return nil, err
 	}

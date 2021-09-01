@@ -42,13 +42,13 @@ func main() {
 	}
 	defer conn.Close()
 
-	client := pb.NewKFServingGRPCClient(conn)
+	client := pb.NewKServeGRPCClient(conn)
 
 	SayHello(client, "world")
-	SendSomething(client, "KFServing")
+	SendSomething(client, "KServe")
 }
 
-func SayHello(client pb.KFServingGRPCClient, msg string) {
+func SayHello(client pb.KServeGRPCClient, msg string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 	rep, err := client.SayHello(ctx, &pb.HelloRequest{Name: msg})
@@ -58,7 +58,7 @@ func SayHello(client pb.KFServingGRPCClient, msg string) {
 	log.Printf("SyaHello got %v\n", rep.GetMessage())
 }
 
-func SendSomething(client pb.KFServingGRPCClient, msg string) {
+func SendSomething(client pb.KServeGRPCClient, msg string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 	rep, err := client.SendSomething(ctx, &pb.HelloRequest{Name: msg})

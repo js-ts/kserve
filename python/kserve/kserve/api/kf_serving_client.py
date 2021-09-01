@@ -24,7 +24,7 @@ from .creds_utils import set_gcs_credentials, set_s3_credentials, set_azure_cred
 from .kf_serving_watch import isvc_watch
 
 
-class KFServingClient(object):
+class KServeClient(object):
 
     def __init__(self, config_file=None, context=None,  # pylint: disable=too-many-arguments
                  client_configuration=None, persist_config=True):
@@ -98,7 +98,7 @@ class KFServingClient(object):
         """
 
         if inferenceservice.api_version == constants.KSERVE_V1ALPHA2:
-            logging.warning("The version v1alpha2 will be deprecated from KFServing 0.6 release.")
+            logging.warning("The version v1alpha2 will be deprecated from KServe 0.7 release.")
         version = inferenceservice.api_version.split("/")[1]
 
         if namespace is None:
@@ -136,7 +136,7 @@ class KFServingClient(object):
         :return: inference service
         """
         if version == 'v1alpha2':
-            logging.warning("The version v1alpha2 will be deprecated from KFServing 0.6 release.")
+            logging.warning("The version v1alpha2 will be deprecated from KServe 0.7 release.")
 
         if namespace is None:
             namespace = utils.get_default_target_namespace()
@@ -189,7 +189,7 @@ class KFServingClient(object):
         """
 
         if inferenceservice.api_version == constants.KSERVE_V1ALPHA2:
-            logging.warning("The version v1alpha2 will be deprecated from KFServing 0.6 release.")
+            logging.warning("The version v1alpha2 will be deprecated from KServe 0.7 release.")
         version = inferenceservice.api_version.split("/")[1]
         if namespace is None:
             namespace = utils.set_isvc_namespace(inferenceservice)
@@ -230,7 +230,7 @@ class KFServingClient(object):
         """
 
         if inferenceservice.api_version == constants.KSERVE_V1ALPHA2:
-            logging.warning("The version v1alpha2 will be deprecated from KFServing 0.6 release.")
+            logging.warning("The version v1alpha2 will be deprecated from KServe 0.7 release.")
         version = inferenceservice.api_version.split("/")[1]
 
         if namespace is None:

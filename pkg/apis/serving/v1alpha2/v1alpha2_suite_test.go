@@ -113,14 +113,14 @@ func TestMain(m *testing.M) {
 	var configMap = &v1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      constants.InferenceServiceConfigMapName,
-			Namespace: constants.KFServingNamespace,
+			Namespace: constants.KServeNamespace,
 		},
 		Data: configs,
 	}
 	//Create namespace
 	kfservingNamespaceObj := &v1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: constants.KFServingNamespace,
+			Name: constants.KServeNamespace,
 		},
 	}
 	if err := c.Create(context.Background(), kfservingNamespaceObj); err != nil {

@@ -50,9 +50,10 @@ while [[ $# -gt 0 ]]; do
     esac
     shift
 done
+#TODO check backward compatibility
 [ -z ${secret} ] && secret=kfserving-webhook-server-cert
 [ -z ${namespace} ] && namespace=kserve
-[ -z ${webhookDeployment} ] && webhookDeployment=kfserving-controller-manager
+[ -z ${webhookDeployment} ] && webhookDeployment=kserve-controller-manager
 [ -z ${webhookName} ] && webhookName=inferenceservice.serving.kserve.io
 [ -z ${service} ] && service=kfserving-webhook-server-service
 webhookDeploymentName=${webhookDeployment}-0

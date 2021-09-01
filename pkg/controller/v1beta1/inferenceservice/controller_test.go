@@ -100,7 +100,7 @@ var _ = Describe("v1beta1 inference service controller", func() {
 			var configMap = &v1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      constants.InferenceServiceConfigMapName,
-					Namespace: constants.KFServingNamespace,
+					Namespace: constants.KServeNamespace,
 				},
 				Data: configs,
 			}
@@ -362,7 +362,7 @@ var _ = Describe("v1beta1 inference service controller", func() {
 			var configMap = &v1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      constants.InferenceServiceConfigMapName,
-					Namespace: constants.KFServingNamespace,
+					Namespace: constants.KServeNamespace,
 				},
 				Data: configs,
 			}
@@ -577,7 +577,7 @@ var _ = Describe("v1beta1 inference service controller", func() {
 			var configMap = &v1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      constants.InferenceServiceConfigMapName,
-					Namespace: constants.KFServingNamespace,
+					Namespace: constants.KServeNamespace,
 				},
 				Data: configs,
 			}
@@ -622,7 +622,7 @@ var _ = Describe("v1beta1 inference service controller", func() {
 								PodSpec: v1.PodSpec{
 									Containers: []v1.Container{
 										{
-											Name:  "kfserving-container",
+											Name:  constants.InferenceServiceContainerName,
 											Image: "kfserving/alibi-explainer:0.4.0",
 											Args: []string{
 												"--model_name",
@@ -744,7 +744,7 @@ var _ = Describe("v1beta1 inference service controller", func() {
 			var configMap = &v1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      constants.InferenceServiceConfigMapName,
-					Namespace: constants.KFServingNamespace,
+					Namespace: constants.KServeNamespace,
 				},
 				Data: configs,
 			}
@@ -950,7 +950,7 @@ var _ = Describe("v1beta1 inference service controller", func() {
 		var configMap = &v1.ConfigMap{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      constants.InferenceServiceConfigMapName,
-				Namespace: constants.KFServingNamespace,
+				Namespace: constants.KServeNamespace,
 			},
 			Data: configs,
 		}

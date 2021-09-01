@@ -16,7 +16,7 @@ import numpy as np
 import os
 from kubernetes import client
 
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import constants
 from kserve import V1beta1PredictorSpec
 from kserve import V1beta1TorchServeSpec
@@ -26,7 +26,7 @@ from kubernetes.client import V1ResourceRequirements
 from ..common.utils import predict
 from ..common.utils import KSERVE_TEST_NAMESPACE
 
-KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
+kserve_client = KServeClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
 def test_pytorch():
@@ -49,13 +49,13 @@ def test_pytorch():
                                        name=service_name, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor))
 
-    KFServing.create(isvc)
+    kserve_client.create(isvc)
     try:
-        KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
+        kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
     except RuntimeError as e:
-        print(KFServing.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1", KSERVE_TEST_NAMESPACE,
+        print(kserve_client.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1", KSERVE_TEST_NAMESPACE,
                                                                   "services", service_name + "-predictor-default"))
-        pods = KFServing.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
+        pods = kserve_client.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
                                                       label_selector='serving.kserve.io/inferenceservice={}'.
                                                       format(service_name))
         for pod in pods.items:
@@ -63,4 +63,4 @@ def test_pytorch():
         raise e
     res = predict(service_name, './data/cifar_input.json')
     assert(np.argmax(res["predictions"]) == 3)
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)

@@ -21,9 +21,9 @@ from kserve import V1alpha2PredictorSpec
 from kserve import V1alpha2TensorflowSpec
 from kserve import V1alpha2InferenceServiceSpec
 from kserve import V1alpha2InferenceService
-from kserve import KFServingClient
+from kserve import KServeClient
 
-KFServing = KFServingClient()
+kserve_client = KServeClient()
 
 mocked_unit_result = \
     '''
@@ -62,59 +62,59 @@ def generate_inferenceservice():
 
 
 def test_inferenceservice_client_creat():
-    '''Unit test for kfserving create api'''
-    with patch('kserve.api.kf_serving_client.KFServingClient.create',
+    '''Unit test for kserve create api'''
+    with patch('kserve.api.kf_serving_client.KServeClient.create',
                return_value=mocked_unit_result):
         isvc = generate_inferenceservice()
-        assert mocked_unit_result == KFServing.create(
+        assert mocked_unit_result == kserve_client.create(
             isvc, namespace='kubeflow')
 
 
 def test_inferenceservice_client_get():
-    '''Unit test for kfserving get api'''
-    with patch('kserve.api.kf_serving_client.KFServingClient.get',
+    '''Unit test for kserve get api'''
+    with patch('kserve.api.kf_serving_client.KServeClient.get',
                return_value=mocked_unit_result):
-        assert mocked_unit_result == KFServing.get(
+        assert mocked_unit_result == kserve_client.get(
             'flower-sample', namespace='kubeflow')
 
 
 def test_inferenceservice_client_watch():
-    '''Unit test for kfserving get api'''
-    with patch('kserve.api.kf_serving_client.KFServingClient.get',
+    '''Unit test for kserve get api'''
+    with patch('kserve.api.kf_serving_client.KServeClient.get',
                return_value=mocked_unit_result):
-        assert mocked_unit_result == KFServing.get('flower-sample', namespace='kubeflow',
+        assert mocked_unit_result == kserve_client.get('flower-sample', namespace='kubeflow',
                                                    watch=True, timeout_seconds=120)
 
 
 def test_inferenceservice_client_patch():
-    '''Unit test for kfserving patch api'''
-    with patch('kserve.api.kf_serving_client.KFServingClient.patch',
+    '''Unit test for kserve patch api'''
+    with patch('kserve.api.kf_serving_client.KServeClient.patch',
                return_value=mocked_unit_result):
         isvc = generate_inferenceservice()
-        assert mocked_unit_result == KFServing.patch(
+        assert mocked_unit_result == kserve_client.patch(
             'flower-sample', isvc, namespace='kubeflow')
 
 
 def test_inferenceservice_client_rollout_canary():
-    '''Unit test for kfserving promote api'''
-    with patch('kserve.api.kf_serving_client.KFServingClient.rollout_canary',
+    '''Unit test for kserve promote api'''
+    with patch('kserve.api.kf_serving_client.KServeClient.rollout_canary',
                return_value=mocked_unit_result):
-        assert mocked_unit_result == KFServing.rollout_canary(
+        assert mocked_unit_result == kserve_client.rollout_canary(
             'flower-sample', namespace='kubeflow')
 
 
 def test_inferenceservice_client_replace():
-    '''Unit test for kfserving replace api'''
-    with patch('kserve.api.kf_serving_client.KFServingClient.replace',
+    '''Unit test for kserve replace api'''
+    with patch('kserve.api.kf_serving_client.KServeClient.replace',
                return_value=mocked_unit_result):
         isvc = generate_inferenceservice()
-        assert mocked_unit_result == KFServing.replace(
+        assert mocked_unit_result == kserve_client.replace(
             'flower-sample', isvc, namespace='kubeflow')
 
 
 def test_inferenceservice_client_delete():
-    '''Unit test for kfserving delete api'''
-    with patch('kserve.api.kf_serving_client.KFServingClient.delete',
+    '''Unit test for kserve delete api'''
+    with patch('kserve.api.kf_serving_client.KServeClient.delete',
                return_value=mocked_unit_result):
-        assert mocked_unit_result == KFServing.delete(
+        assert mocked_unit_result == kserve_client.delete(
             'flower-sample', namespace='kubeflow')

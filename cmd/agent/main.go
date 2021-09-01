@@ -54,7 +54,7 @@ var (
 	// probing flags
 	readinessProbeTimeout = flag.Duration("probe-period", -1, "run readiness probe with given timeout")
 	// This creates an abstract socket instead of an actual file.
-	unixSocketPath = "@/kfserving/agent.sock"
+	unixSocketPath = "@/kserve/agent.sock"
 )
 
 type config struct {

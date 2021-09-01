@@ -23,8 +23,8 @@ setup(
     name='pytorchserver',
     version='0.6.0',
     author_email='singhan@us.ibm.com',
-    license='https://github.com/kubeflow/kfserving/LICENSE',
-    url='https://github.com/kubeflow/kfserving/python/pytorchserver',
+    license='https://github.com/kserve/kserve/LICENSE',
+    url='https://github.com/kserve/kserve/python/pytorchserver',
     description='Model Server implementation for PyTorch. ' +
     'Not intended for use outside KFServing Frameworks Images',
     long_description=open('README.md').read(),

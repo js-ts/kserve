@@ -17,7 +17,7 @@ import os
 
 from kubernetes import client
 
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import constants
 from kserve import V1beta1PredictorSpec
 from kserve import V1beta1InferenceServiceSpec
@@ -31,7 +31,7 @@ from ..common.utils import explain_art
 from ..common.utils import KSERVE_TEST_NAMESPACE
 
 logging.basicConfig(level=logging.INFO)
-KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
+kserve_client = KServeClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
 def test_tabular_explainer():
@@ -58,14 +58,14 @@ def test_tabular_explainer():
                                                config={"nb_classes": "10"})))
                                    )
 
-    KFServing.create(isvc)
+    kserve_client.create(isvc)
     try:
-        KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE, timeout_seconds=720)
+        kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE, timeout_seconds=720)
     except RuntimeError as e:
-        logging.info(KFServing.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1",
+        logging.info(kserve_client.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1",
                                                                          KSERVE_TEST_NAMESPACE, "services",
                                                                          service_name + "-predictor-default"))
-        pods = KFServing.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
+        pods = kserve_client.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
                                                       label_selector='serving.kserve.io/inferenceservice={}'.
                                                       format(service_name))
         for pod in pods.items:
@@ -77,4 +77,4 @@ def test_tabular_explainer():
 
     adv_prediction = explain_art(service_name, './data/mnist_input_bw.json')
     assert (adv_prediction != 3)
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)

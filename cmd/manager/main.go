@@ -81,21 +81,21 @@ func main() {
 
 	log.Info("Registering Components.")
 
-	log.Info("Setting up KFServing v1alpha1 scheme")
+	log.Info("Setting up KServe v1alpha1 scheme")
 	if err := v1alpha1.AddToScheme(mgr.GetScheme()); err != nil {
-		log.Error(err, "unable to add KFServing v1alpha1 to scheme")
+		log.Error(err, "unable to add KServe v1alpha1 to scheme")
 		os.Exit(1)
 	}
 
-	log.Info("Setting up KFServing v1alpha2 scheme")
+	log.Info("Setting up KServe v1alpha2 scheme")
 	if err := v1alpha2.AddToScheme(mgr.GetScheme()); err != nil {
-		log.Error(err, "unable to add KFServing v1alpha2 to scheme")
+		log.Error(err, "unable to add KServe v1alpha2 to scheme")
 		os.Exit(1)
 	}
 
-	log.Info("Setting up KFServing v1beta1 scheme")
+	log.Info("Setting up KServe v1beta1 scheme")
 	if err := v1beta1.AddToScheme(mgr.GetScheme()); err != nil {
-		log.Error(err, "unable to add KFServing v1beta1 to scheme")
+		log.Error(err, "unable to add KServe v1beta1 to scheme")
 		os.Exit(1)
 	}
 

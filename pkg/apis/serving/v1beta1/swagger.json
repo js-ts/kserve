@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "Python SDK for KFServing",
-    "title": "KFServing",
+    "description": "Python SDK for KServe",
+    "title": "KServe",
     "version": "v0.1"
   },
   "paths": {},

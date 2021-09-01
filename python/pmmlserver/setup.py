@@ -24,8 +24,8 @@ setup(
     name='pmmlserver',
     version='0.6.0',
     author_email='anyisalin@gmail.com',
-    license='https://github.com/kubeflow/kfserving/LICENSE',
-    url='https://github.com/kubeflow/kfserving/python/pmmlserver',
+    license='https://github.com/kserve/kserve/LICENSE',
+    url='https://github.com/kserve/kserve/python/pmmlserver',
     description='Model Server implementation for PMML. \
                  Not intended for use outside KFServing Frameworks Images',
     long_description=open('README.md').read(),

@@ -43,12 +43,12 @@ type S3Config struct {
 }
 
 var (
-	InferenceServiceS3SecretEndpointAnnotation   = constants.KFServingAPIGroupName + "/" + "s3-endpoint"
-	InferenceServiceS3SecretRegionAnnotation     = constants.KFServingAPIGroupName + "/" + "s3-region"
-	InferenceServiceS3SecretSSLAnnotation        = constants.KFServingAPIGroupName + "/" + "s3-verifyssl"
-	InferenceServiceS3SecretHttpsAnnotation      = constants.KFServingAPIGroupName + "/" + "s3-usehttps"
-	InferenceServiceS3UseVirtualBucketAnnotation = constants.KFServingAPIGroupName + "/" + "s3-usevirtualbucket"
-	InferenceServiceS3UseAnonymousCredential     = constants.KFServingAPIGroupName + "/" + "s3-useanoncredential"
+	InferenceServiceS3SecretEndpointAnnotation   = constants.KServeAPIGroupName + "/" + "s3-endpoint"
+	InferenceServiceS3SecretRegionAnnotation     = constants.KServeAPIGroupName + "/" + "s3-region"
+	InferenceServiceS3SecretSSLAnnotation        = constants.KServeAPIGroupName + "/" + "s3-verifyssl"
+	InferenceServiceS3SecretHttpsAnnotation      = constants.KServeAPIGroupName + "/" + "s3-usehttps"
+	InferenceServiceS3UseVirtualBucketAnnotation = constants.KServeAPIGroupName + "/" + "s3-usevirtualbucket"
+	InferenceServiceS3UseAnonymousCredential     = constants.KServeAPIGroupName + "/" + "s3-useanoncredential"
 )
 
 func BuildSecretEnvs(secret *v1.Secret, s3Config *S3Config) []v1.EnvVar {

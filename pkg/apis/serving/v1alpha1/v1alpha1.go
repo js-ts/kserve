@@ -19,7 +19,7 @@ limitations under the License.
 // Package v1alpha1 contains API Schema definitions for the serving v1alpha1 API group
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen=package,register
-// +k8s:conversion-gen=kfserving/pkg/apis/serving
+// +k8s:conversion-gen=kserve/pkg/apis/serving
 // +k8s:defaulter-gen=TypeMeta
 // +groupName=serving.kserve.io
 package v1alpha1
@@ -35,7 +35,7 @@ var (
 	APIVersion = "v1alpha1"
 
 	// SchemeGroupVersion is group version used to register these objects
-	SchemeGroupVersion = schema.GroupVersion{Group: constants.KFServingAPIGroupName, Version: APIVersion}
+	SchemeGroupVersion = schema.GroupVersion{Group: constants.KServeAPIGroupName, Version: APIVersion}
 
 	// SchemeBuilder is used to add go types to the GroupVersionKind scheme
 	SchemeBuilder = &scheme.Builder{GroupVersion: SchemeGroupVersion}

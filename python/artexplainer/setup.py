@@ -23,8 +23,8 @@ setup(
     name='artserver',
     version='0.6.0',
     author_email='Andrew.Butler@ibm.com',
-    license='https://github.com/kubeflow/kfserving/LICENSE',
-    url='https://github.com/kubeflow/kfserving/python/artserver',
+    license='https://github.com/kserve/kserve/LICENSE',
+    url='https://github.com/kserve/kserve/python/artserver',
     description='Model Server implementation for AI Robustness Toolbox. \
                  Not intended for use outside KFServing Frameworks Images',
     long_description='Model Server implementation for AI Robustness Toolbox. \

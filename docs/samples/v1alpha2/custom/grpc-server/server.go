@@ -33,7 +33,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterKFServingGRPCServer(s, &server{})
+	pb.RegisterKServeGRPCServer(s, &server{})
 	log.Println("server startup...")
 	s.Serve(lis)
 }

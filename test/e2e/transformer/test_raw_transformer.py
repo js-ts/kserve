@@ -19,7 +19,7 @@ import time
 import logging
 from kubernetes import client
 
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import constants
 from kserve import V1beta1PredictorSpec
 from kserve import V1beta1TransformerSpec
@@ -32,7 +32,7 @@ from kubernetes.client import V1EnvVar
 from ..common.utils import get_cluster_ip
 from ..common.utils import KSERVE_TEST_NAMESPACE
 logging.basicConfig(level=logging.INFO)
-KFServing = KFServingClient(
+kserve_client = KServeClient(
     config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
@@ -52,7 +52,7 @@ def test_transformer():
         min_replicas=1,
         containers=[V1Container(
             image='kfserving/torchserve-image-transformer:latest',
-            name='kfserving-container',
+            name='kserve-container',
             resources=V1ResourceRequirements(
                 requests={'cpu': '100m', 'memory': '2Gi'},
                 limits={'cpu': '100m', 'memory': '2Gi'}),
@@ -68,16 +68,16 @@ def test_transformer():
                                        name=service_name, namespace=KSERVE_TEST_NAMESPACE, annotations=annotations),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor, transformer=transformer))
 
-    KFServing.create(isvc)
+    kserve_client.create(isvc)
     try:
-        KFServing.wait_isvc_ready(
+        kserve_client.wait_isvc_ready(
             service_name, namespace=KSERVE_TEST_NAMESPACE)
     except RuntimeError as e:
         raise e
 
     time.sleep(30)
 
-    isvc = KFServing.get(
+    isvc = kserve_client.get(
         service_name,
         namespace=KSERVE_TEST_NAMESPACE,
     )
@@ -100,4 +100,4 @@ def test_transformer():
     preds = json.loads(res.content.decode("utf-8"))
     assert(preds["predictions"] == [2])
 
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)

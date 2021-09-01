@@ -342,10 +342,10 @@ func TestCustomSpecStorageUriInjection(t *testing.T) {
 				},
 				Spec: v1.PodSpec{
 					Containers: []v1.Container{
-						v1.Container{
+						{
 							Name: constants.InferenceServiceContainerName,
 							Env: []v1.EnvVar{
-								v1.EnvVar{
+								{
 									Name:  constants.CustomSpecStorageUriEnvVarKey,
 									Value: "pvc://mypvcname/some/path/on/pvc",
 								},
@@ -368,10 +368,10 @@ func TestCustomSpecStorageUriInjection(t *testing.T) {
 				},
 				Spec: v1.PodSpec{
 					Containers: []v1.Container{
-						v1.Container{
+						{
 							Name: constants.InferenceServiceContainerName,
 							Env: []v1.EnvVar{
-								v1.EnvVar{
+								{
 									Name:  constants.CustomSpecStorageUriEnvVarKey,
 									Value: "",
 								},
@@ -394,10 +394,10 @@ func TestCustomSpecStorageUriInjection(t *testing.T) {
 				},
 				Spec: v1.PodSpec{
 					Containers: []v1.Container{
-						v1.Container{
+						{
 							Name: constants.InferenceServiceContainerName,
 							Env: []v1.EnvVar{
-								v1.EnvVar{
+								{
 									Name:  "TestRandom",
 									Value: "val",
 								},
@@ -556,7 +556,7 @@ func TestCredentialInjection(t *testing.T) {
 						},
 					},
 					Volumes: []v1.Volume{
-						v1.Volume{
+						{
 							Name: "kfserving-provision-location",
 							VolumeSource: v1.VolumeSource{
 								EmptyDir: &v1.EmptyDirVolumeSource{},
@@ -597,7 +597,7 @@ func TestCredentialInjection(t *testing.T) {
 				},
 				Spec: v1.PodSpec{
 					Containers: []v1.Container{
-						v1.Container{
+						{
 							Name: constants.InferenceServiceContainerName,
 							VolumeMounts: []v1.VolumeMount{
 								{

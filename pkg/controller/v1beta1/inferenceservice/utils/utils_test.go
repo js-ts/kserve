@@ -577,7 +577,7 @@ func TestIsMMSPredictor(t *testing.T) {
 						Predictor: PredictorSpec{
 							PodSpec: PodSpec{
 								Containers: []v1.Container{
-									{Name: "kfserving-container",
+									{Name: constants.InferenceServiceContainerName,
 										Image: "some-image",
 										Env:   []v1.EnvVar{{Name: constants.CustomSpecMultiModelServerEnvVarKey, Value: strconv.FormatBool(mmsCase)}},
 									},
@@ -597,7 +597,7 @@ func TestIsMMSPredictor(t *testing.T) {
 						Predictor: PredictorSpec{
 							PodSpec: PodSpec{
 								Containers: []v1.Container{
-									{Name: "kfserving-container",
+									{Name: constants.InferenceServiceContainerName,
 										Image: "some-image",
 										Env:   []v1.EnvVar{{Name: constants.CustomSpecMultiModelServerEnvVarKey, Value: strconv.FormatBool(mmsCase)}, {Name: constants.CustomSpecStorageUriEnvVarKey, Value: "gs://some-uri"}},
 									},

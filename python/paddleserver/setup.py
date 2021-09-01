@@ -18,7 +18,7 @@ setup(
     name='paddleserver',
     version='0.6.0',
     author_email='zhangzhengyuan0604@gmail.com',
-    license='https://github.com/kubeflow/kfserving/LICENSE',
+    license='https://github.com/kserve/kserve/LICENSE',
     description='Model Server implementation for Paddle. \
                  Not intended for use outside KFServing Frameworks Images',
     long_description=open('README.md').read(),

@@ -15,7 +15,7 @@
 import os
 import numpy as np
 from kubernetes import client
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import constants
 from kserve import V1beta1PredictorSpec
 from kserve import V1beta1TFServingSpec
@@ -26,10 +26,10 @@ from kubernetes.client import V1ResourceRequirements
 from ..common.utils import predict
 from ..common.utils import KSERVE_TEST_NAMESPACE
 
-KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
+kserve_client = KServeClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
-def test_tensorflow_kfserving():
+def test_tensorflow_kserve():
     service_name = 'isvc-tensorflow'
     predictor = V1beta1PredictorSpec(
         min_replicas=1,
@@ -48,10 +48,10 @@ def test_tensorflow_kfserving():
                                        name=service_name, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor))
 
-    KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.create(isvc)
+    kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
     res = predict(service_name, './data/flower_input.json')
     assert(np.argmax(res["predictions"][0].get('scores')) == 0)
 
     # Delete the InferenceService
-    KFServing.delete(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, namespace=KSERVE_TEST_NAMESPACE)

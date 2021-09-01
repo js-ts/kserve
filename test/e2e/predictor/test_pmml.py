@@ -14,7 +14,7 @@
 
 import os
 
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import V1beta1InferenceService
 from kserve import V1beta1InferenceServiceSpec
 from kserve import V1beta1PMMLSpec
@@ -26,10 +26,10 @@ from kubernetes.client import V1ResourceRequirements
 from ..common.utils import KSERVE_TEST_NAMESPACE
 from ..common.utils import predict
 
-KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
+kserve_client = KServeClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
-def test_pmml_kfserving():
+def test_pmml_kserve():
     service_name = 'isvc-pmml'
     predictor = V1beta1PredictorSpec(
         min_replicas=1,
@@ -48,12 +48,12 @@ def test_pmml_kfserving():
                                         name=service_name, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor))
 
-    KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.create(isvc)
+    kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
     res = predict(service_name, './data/pmml_input.json')
     assert (res["predictions"] == [{'Species': 'setosa',
                                     'Probability_setosa': 1.0,
                                     'Probability_versicolor': 0.0,
                                     'Probability_virginica': 0.0,
                                     'Node_Id': '2'}])
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)

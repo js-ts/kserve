@@ -15,9 +15,9 @@
 # coding: utf-8
 
 """
-    KFServing
+    KServe
 
-    Python SDK for KFServing  # noqa: E501
+    Python SDK for KServe  # noqa: E501
 
     OpenAPI spec version: v0.1
     

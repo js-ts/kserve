@@ -17,7 +17,7 @@ limitations under the License.
 // Package v1alpha2 contains API Schema definitions for the serving v1alpha2 API group
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen=package,register
-// +k8s:conversion-gen=kfserving/pkg/apis/serving
+// +k8s:conversion-gen=kserve/pkg/apis/serving
 // +k8s:defaulter-gen=TypeMeta
 // +groupName=serving.kserve.io
 package v1alpha2
@@ -26,4 +26,4 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 )
 
-var logger = logf.Log.WithName("kfserving-v1alpha2-types")
+var logger = logf.Log.WithName("kserve-v1alpha2-types")

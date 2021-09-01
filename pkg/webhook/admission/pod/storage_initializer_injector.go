@@ -29,11 +29,11 @@ import (
 const (
 	StorageInitializerContainerName         = "storage-initializer"
 	StorageInitializerConfigMapKeyName      = "storageInitializer"
-	StorageInitializerVolumeName            = "kfserving-provision-location"
-	StorageInitializerContainerImage        = "gcr.io/kfserving/storage-initializer"
+	StorageInitializerVolumeName            = "kserve-provision-location"
+	StorageInitializerContainerImage        = "kserve/storage-initializer"
 	StorageInitializerContainerImageVersion = "latest"
 	PvcURIPrefix                            = "pvc://"
-	PvcSourceMountName                      = "kfserving-pvc-source"
+	PvcSourceMountName                      = "kserve-pvc-source"
 	PvcSourceMountPath                      = "/mnt/pvc"
 )
 
@@ -96,7 +96,7 @@ func (mi *StorageInitializerInjector) InjectStorageInitializer(pod *v1.Pod) erro
 		}
 	}
 
-	// Find the kfserving-container (this is the model inference server)
+	// Find the kserve-container (this is the model inference server)
 	var userContainer *v1.Container
 	for idx, container := range pod.Spec.Containers {
 		if strings.Compare(container.Name, constants.InferenceServiceContainerName) == 0 {
@@ -146,7 +146,7 @@ func (mi *StorageInitializerInjector) InjectStorageInitializer(pod *v1.Pod) erro
 		srcURI = PvcSourceMountPath + "/" + pvcPath
 	}
 
-	// Create a volume that is shared between the storage-initializer and kfserving-container
+	// Create a volume that is shared between the storage-initializer and kserve-container
 	sharedVolume := v1.Volume{
 		Name: StorageInitializerVolumeName,
 		VolumeSource: v1.VolumeSource{
@@ -192,7 +192,7 @@ func (mi *StorageInitializerInjector) InjectStorageInitializer(pod *v1.Pod) erro
 		SecurityContext: securityContext,
 	}
 
-	// Add a mount the shared volume on the kfserving-container, update the PodSpec
+	// Add a mount the shared volume on the kserve-container, update the PodSpec
 	sharedVolumeReadMount := v1.VolumeMount{
 		Name:      StorageInitializerVolumeName,
 		MountPath: constants.DefaultModelLocalMountPath,

@@ -18,7 +18,7 @@ import requests
 import os
 from urllib.parse import urlparse
 from kubernetes import client
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import constants
 
 logging.basicConfig(level=logging.INFO)
@@ -29,14 +29,14 @@ KSERVE_TEST_NAMESPACE = "kfserving-ci-e2e-test"
 
 def predict(service_name, input_json, protocol_version="v1",
             version=constants.KSERVE_V1BETA1_VERSION, model_name=None):
-    kfs_client = KFServingClient(
+    kfs_client = KServeClient(
         config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
     isvc = kfs_client.get(
         service_name,
         namespace=KSERVE_TEST_NAMESPACE,
         version=version,
     )
-    # temporary sleep until this is fixed https://github.com/kubeflow/kfserving/issues/604
+    # temporary sleep until this is fixed https://github.com/kserve/kserve/issues/604
     time.sleep(10)
     cluster_ip = get_cluster_ip()
     host = urlparse(isvc["status"]["url"]).netloc
@@ -75,14 +75,14 @@ def explain_art(service_name, input_json):
 
 
 def explain_response(service_name, input_json):
-    kfs_client = KFServingClient(
+    kfs_client = KServeClient(
         config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
     isvc = kfs_client.get(
         service_name,
         namespace=KSERVE_TEST_NAMESPACE,
         version=constants.KSERVE_V1BETA1_VERSION,
     )
-    # temporary sleep until this is fixed https://github.com/kubeflow/kfserving/issues/604
+    # temporary sleep until this is fixed https://github.com/kserve/kserve/issues/604
     time.sleep(10)
     cluster_ip = get_cluster_ip()
     host = urlparse(isvc["status"]["url"]).netloc
@@ -125,7 +125,7 @@ def explain_response(service_name, input_json):
                 api_response = kfs_client.core_api.read_namespaced_pod_log(
                     pod.metadata.name,
                     KSERVE_TEST_NAMESPACE,
-                    container="kfserving-container",
+                    container="kserve-container",
                 )
                 logging.info(api_response)
             raise e

@@ -15,7 +15,7 @@
 import os
 from kubernetes import client
 
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import constants
 from kserve import V1beta1PredictorSpec
 from kserve import V1beta1TFServingSpec
@@ -27,7 +27,7 @@ from ..common.utils import KSERVE_TEST_NAMESPACE
 
 
 # Setting config_file is required since SDK is running in a different cluster than KFServing
-KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
+kserve_client = KServeClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
 def test_canary_rollout():
@@ -47,8 +47,8 @@ def test_canary_rollout():
                                         name=service_name, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=default_endpoint_spec)
 
-    KFServing.create(isvc)
-    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.create(isvc)
+    kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
 
     # define canary endpoint spec, and then rollout 10% traffic to the canary version
     canary_endpoint_spec = V1beta1InferenceServiceSpec(
@@ -65,13 +65,13 @@ def test_canary_rollout():
                                         name=service_name, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=canary_endpoint_spec)
 
-    KFServing.patch(service_name, isvc, namespace=KSERVE_TEST_NAMESPACE)
-    KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.patch(service_name, isvc, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
 
-    canary_isvc = KFServing.get(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    canary_isvc = kserve_client.get(service_name, namespace=KSERVE_TEST_NAMESPACE)
     for traffic in canary_isvc['status']['components']['predictor']['traffic']:
         if traffic['latestRevision']:
             assert(traffic['percent'] == 10)
 
     # Delete the InferenceService
-    KFServing.delete(service_name, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, namespace=KSERVE_TEST_NAMESPACE)

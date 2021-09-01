@@ -15,7 +15,7 @@
 import configparser
 from os.path import expanduser
 from kubernetes import client
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import constants
 
 KSERVE_TEST_NAMESPACE = "kserve-ci-e2e-test"
@@ -60,7 +60,7 @@ def check_sa_exists(service_account):
 
 def test_set_credentials_s3():
     """Test S3 credentials creating."""
-    kfserving = KFServingClient()
+    kfserving = KServeClient()
     credentials_file = './credentials/aws_credentials'
 
     # Test creating service account case.
@@ -101,9 +101,9 @@ def test_set_credentials_s3():
 
 def test_set_credentials_gcp():
     '''Test GCP credentials creating'''
-    KFServing = KFServingClient()
+    kserve_client = KServeClient()
     sa_name = constants.DEFAULT_SA_NAME
-    KFServing.set_credentials(storage_type='gcs',
+    kserve_client.set_credentials(storage_type='gcs',
                               namespace=KSERVE_TEST_NAMESPACE,
                               credentials_file='./credentials/gcp_credentials.json',
                               sa_name=sa_name)
@@ -115,9 +115,9 @@ def test_set_credentials_gcp():
 
 def test_azure_credentials():
     '''Test Azure credentials creating'''
-    KFServing = KFServingClient()
+    kserve_client = KServeClient()
     sa_name = constants.DEFAULT_SA_NAME
-    KFServing.set_credentials(storage_type='Azure',
+    kserve_client.set_credentials(storage_type='Azure',
                               namespace=KSERVE_TEST_NAMESPACE,
                               credentials_file='./credentials/azure_credentials.json',
                               sa_name=sa_name)

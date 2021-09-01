@@ -15,7 +15,7 @@
 import os
 from kubernetes import client
 
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import constants
 from kserve import V1beta1PredictorSpec
 from kserve import V1beta1SKLearnSpec
@@ -28,14 +28,14 @@ from ..common.utils import predict
 from ..common.utils import KSERVE_TEST_NAMESPACE
 import time
 
-KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
+kserve_client = KServeClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
-def test_kfserving_logger():
+def test_kserve_logger():
     msg_dumper = 'message-dumper'
     predictor = V1beta1PredictorSpec(
         min_replicas=1,
-        containers=[V1Container(name="kfserving-container",
+        containers=[V1Container(name="kserve-container",
                                 image='gcr.io/knative-releases/knative.dev/eventing-contrib/cmd/event_display')]
     )
 
@@ -45,8 +45,8 @@ def test_kfserving_logger():
                                         name=msg_dumper, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor))
 
-    KFServing.create(isvc)
-    KFServing.wait_isvc_ready(msg_dumper, namespace=KSERVE_TEST_NAMESPACE)
+    kserve_client.create(isvc)
+    kserve_client.wait_isvc_ready(msg_dumper, namespace=KSERVE_TEST_NAMESPACE)
 
     service_name = 'isvc-logger'
     predictor = V1beta1PredictorSpec(
@@ -70,11 +70,11 @@ def test_kfserving_logger():
                                        name=service_name, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor))
 
-    KFServing.create(isvc)
+    kserve_client.create(isvc)
     try:
-        KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
+        kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE)
     except RuntimeError:
-        pods = KFServing.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
+        pods = kserve_client.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
                                                       label_selector='serving.kserve.io/inferenceservice={}'.
                                                       format(service_name))
         for pod in pods.items:
@@ -82,17 +82,17 @@ def test_kfserving_logger():
 
     res = predict(service_name, './data/iris_input.json')
     assert(res["predictions"] == [1, 1])
-    pods = KFServing.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
+    pods = kserve_client.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
                                                   label_selector='serving.kserve.io/inferenceservice={}'.
                                                   format(msg_dumper))
     time.sleep(5)
     log = ''
     for pod in pods.items:
-        log += KFServing.core_api.read_namespaced_pod_log(name=pod.metadata.name,
+        log += kserve_client.core_api.read_namespaced_pod_log(name=pod.metadata.name,
                                                           namespace=pod.metadata.namespace,
-                                                          container="kfserving-container")
+                                                          container="kserve-container")
         print(log)
     assert("org.kubeflow.serving.inference.request" in log)
     assert("org.kubeflow.serving.inference.response" in log)
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
-    KFServing.delete(msg_dumper, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(msg_dumper, KSERVE_TEST_NAMESPACE)

@@ -15,10 +15,10 @@ metadata:
   namespace: kserve
 spec:
   # $(SERVICE_NAME) and $(SERVICE_NAMESPACE) will be substituted by kustomize
-  commonName: $(webhookServiceName).$(kfservingNamespace).svc
+  commonName: $(webhookServiceName).$(kserveNamespace).svc
   dnsNames:
-    - $(webhookServiceName).$(kfservingNamespace).svc
+    - $(webhookServiceName).$(kserveNamespace).svc
   issuerRef:
     kind: Issuer
     name: selfsigned-issuer
-  secretName: kfserving-webhook-server-cert # this secret will not be prefixed, since it's not managed by kustomize
+  secretName: kserve-webhook-server-cert # this secret will not be prefixed, since it's not managed by kustomize

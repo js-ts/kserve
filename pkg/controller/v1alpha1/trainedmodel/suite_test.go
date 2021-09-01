@@ -85,7 +85,7 @@ var _ = BeforeSuite(func(done Done) {
 	//Create namespace
 	kfservingNamespaceObj := &v1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: constants.KFServingNamespace,
+			Name: constants.KServeNamespace,
 		},
 	}
 	Expect(k8sClient.Create(context.Background(), kfservingNamespaceObj)).Should(Succeed())

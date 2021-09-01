@@ -23,7 +23,7 @@ from kubernetes.client import (
 
 from kserve import (
     constants,
-    KFServingClient,
+    KServeClient,
     V1beta1PredictorSpec,
     V1beta1InferenceService,
     V1beta1InferenceServiceSpec,
@@ -32,7 +32,7 @@ from kserve import (
 from ..common.utils import KSERVE_TEST_NAMESPACE, predict
 
 logging.basicConfig(level=logging.INFO)
-KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
+kserve_client = KServeClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
 def test_paddle():
@@ -57,11 +57,11 @@ def test_paddle():
         spec=V1beta1InferenceServiceSpec(predictor=predictor)
     )
 
-    KFServing.create(isvc)
+    kserve_client.create(isvc)
     try:
-        KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE, timeout_seconds=720)
+        kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE, timeout_seconds=720)
     except RuntimeError as e:
-        pods = KFServing.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
+        pods = kserve_client.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
                                                       label_selector='serving.kserve.io/inferenceservice={}'.format(
                                                           service_name))
         for pod in pods.items:
@@ -71,4 +71,4 @@ def test_paddle():
     res = predict(service_name, './data/jay.json')
     assert np.argmax(res["predictions"][0]) == 17
 
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)

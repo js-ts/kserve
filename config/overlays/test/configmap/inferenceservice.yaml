@@ -62,7 +62,7 @@ data:
         },
         "pytorch": {
           "v1" : {
-            "image": "gcr.io/kfserving/pytorchserver",
+            "image": "kserve/pytorchserver",
             "defaultImageVersion": "v0.5.0-rc0",
             "defaultGpuImageVersion": "v0.5.0-rc0-gpu",
             "supportedFrameworks": [

@@ -16,7 +16,7 @@ import logging
 import os
 from kubernetes import client
 
-from kserve import KFServingClient
+from kserve import KServeClient
 from kserve import constants
 from kserve import V1beta1PredictorSpec
 from kserve import V1beta1SKLearnSpec
@@ -31,7 +31,7 @@ from ..common.utils import explain
 from ..common.utils import KSERVE_TEST_NAMESPACE
 
 logging.basicConfig(level=logging.INFO)
-KFServing = KFServingClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
+kserve_client = KServeClient(config_file=os.environ.get("KUBECONFIG", "~/.kube/config"))
 
 
 def test_tabular_explainer():
@@ -48,7 +48,7 @@ def test_tabular_explainer():
     explainer = V1beta1ExplainerSpec(
         min_replicas=1,
         alibi=V1beta1AlibiExplainerSpec(
-            name='kfserving-container',
+            name='kserve-container',
             type='AnchorTabular',
             storage_uri='gs://seldon-models/sklearn/income/explainer-py37-0.6.0',
             resources=V1ResourceRequirements(
@@ -64,14 +64,14 @@ def test_tabular_explainer():
                                        name=service_name, namespace=KSERVE_TEST_NAMESPACE),
                                    spec=V1beta1InferenceServiceSpec(predictor=predictor, explainer=explainer))
 
-    KFServing.create(isvc)
+    kserve_client.create(isvc)
     try:
-        KFServing.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE, timeout_seconds=720)
+        kserve_client.wait_isvc_ready(service_name, namespace=KSERVE_TEST_NAMESPACE, timeout_seconds=720)
     except RuntimeError as e:
-        logging.info(KFServing.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1",
+        logging.info(kserve_client.api_instance.get_namespaced_custom_object("serving.knative.dev", "v1",
                                                                          KSERVE_TEST_NAMESPACE, "services",
                                                                          service_name + "-predictor-default"))
-        pods = KFServing.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
+        pods = kserve_client.core_api.list_namespaced_pod(KSERVE_TEST_NAMESPACE,
                                                       label_selector='serving.kserve.io/inferenceservice={}'.format(
                                                           service_name))
         for pod in pods.items:
@@ -82,4 +82,4 @@ def test_tabular_explainer():
     assert (res["predictions"] == [0])
     precision = explain(service_name, './data/income_input.json')
     assert (precision > 0.9)
-    KFServing.delete(service_name, KSERVE_TEST_NAMESPACE)
+    kserve_client.delete(service_name, KSERVE_TEST_NAMESPACE)
