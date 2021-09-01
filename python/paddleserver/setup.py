@@ -16,11 +16,11 @@ from setuptools import setup, find_packages
 
 setup(
     name='paddleserver',
-    version='0.6.0',
+    version='0.7.0rc0',
     author_email='zhangzhengyuan0604@gmail.com',
     license='https://github.com/kserve/kserve/LICENSE',
     description='Model Server implementation for Paddle. \
-                 Not intended for use outside KFServing Frameworks Images',
+                 Not intended for use outside KServe Frameworks Images',
     long_description=open('README.md').read(),
     python_requires='>3.4',
     packages=find_packages("paddleserver"),

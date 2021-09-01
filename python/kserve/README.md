@@ -1,5 +1,5 @@
-# KFServing Python SDK
-Python SDK for KFServing Server and Client.
+# KServe Python SDK
+Python SDK for KServe Server and Client.
 
 ## Installation
 
@@ -8,7 +8,7 @@ KFServing Python SDK can be installed by `pip` or `Setuptools`.
 ### pip install
 
 ```sh
-pip install kfserving
+pip install kserve
 ```
 
 ### Setuptools
@@ -21,17 +21,18 @@ python setup.py install --user
 (or `sudo python setup.py install` to install the package for all users)
 
 
-## KFServing Server
-KFServing's python server libraries implement a standardized KFServing library that is extended by model serving frameworks such as Scikit Learn, XGBoost and PyTorch. It encapsulates data plane API definitions and storage retrieval for models.
+## KServe Python Server
+KServe's python server libraries implement a standardized library that is extended by model serving frameworks such as Scikit Learn, XGBoost and PyTorch. It encapsulates data plane API definitions and storage retrieval for models.
 
-KFServing provides many functionalities, including among others:
+It provides many functionalities, including among others:
 
 * Registering a model and starting the server
 * Prediction Handler
+* Pre/Post Processing Handler
 * Liveness Handler
 * Readiness Handlers
 
-KFServing supports the following storage providers:
+It supports the following storage providers:
 
 * Google Cloud Storage with a prefix: "gs://"
     * By default, it uses `GOOGLE_APPLICATION_CREDENTIALS` environment variable for user authentication.
@@ -53,11 +54,11 @@ KFServing supports the following storage providers:
     * `https://<some_url>.com/model.joblib`
     * `http://<some_url>.com/model.joblib`
 
-## KFServing Client
+## KServe Client
 
 ### Getting Started
 
-KFServing's python client interacts with KFServing APIs for executing operations on a remote KFServing cluster, such as creating, patching and deleting of a InferenceService instance. See the [Sample for KFServing Python SDK Client](../../docs/samples/client) to get started.
+KServe's python client interacts with KServe control plane APIs for executing operations on a remote KServe cluster, such as creating, patching and deleting of a InferenceService instance. See the [Sample for Python SDK Client](../../docs/samples/client) to get started.
 
 ### Documentation for Client API
 
@@ -68,8 +69,6 @@ Class | Method |  Description
 [KFServingClient](docs/KFServingClient.md) | [get](docs/KFServingClient.md#get)    | Get or watch the specified InferenceService or all InferenceServices in the namespace |
 [KFServingClient](docs/KFServingClient.md) | [patch](docs/KFServingClient.md#patch)  | Patch the specified InferenceService|
 [KFServingClient](docs/KFServingClient.md) | [replace](docs/KFServingClient.md#replace) | Replace the specified InferenceService|
-[KFServingClient](docs/KFServingClient.md) | [rollout_canary](docs/KFServingClient.md#rollout_canary) | Rollout the traffic on `canary` version for specified InferenceService|
-[KFServingClient](docs/KFServingClient.md) | [promote](docs/KFServingClient.md#promote) | Promote the `canary` version of the InferenceService to `default`|
 [KFServingClient](docs/KFServingClient.md) | [delete](docs/KFServingClient.md#delete) | Delete the specified InferenceService |
 [KFServingClient](docs/KFServingClient.md) | [wait_isvc_ready](docs/KFServingClient.md#wait_isvc_ready) | Wait for the InferenceService to be ready |
 [KFServingClient](docs/KFServingClient.md) | [is_isvc_ready](docs/KFServingClient.md#is_isvc_ready) | Check if the InferenceService is ready |
@@ -81,26 +80,6 @@ Class | Method |  Description
  - [KnativeURL](docs/KnativeURL.md)
  - [KnativeVolatileTime](docs/KnativeVolatileTime.md)
  - [NetUrlUserinfo](docs/NetUrlUserinfo.md)
- - [V1alpha2AlibiExplainerSpec](docs/V1alpha2AlibiExplainerSpec.md)
- - [V1alpha2Batcher](docs/V1alpha2Batcher.md)
- - [V1alpha2CustomSpec](docs/V1alpha2CustomSpec.md)
- - [V1alpha2DeploymentSpec](docs/V1alpha2DeploymentSpec.md)
- - [V1alpha2EndpointSpec](docs/V1alpha2EndpointSpec.md)
- - [V1alpha2ExplainerSpec](docs/V1alpha2ExplainerSpec.md)
- - [V1alpha2InferenceService](docs/V1alpha2InferenceService.md)
- - [V1alpha2InferenceServiceList](docs/V1alpha2InferenceServiceList.md)
- - [V1alpha2InferenceServiceSpec](docs/V1alpha2InferenceServiceSpec.md)
- - [V1alpha2InferenceServiceStatus](docs/V1alpha2InferenceServiceStatus.md)
- - [V1alpha2Logger](docs/V1alpha2Logger.md)
- - [V1alpha2ONNXSpec](docs/V1alpha2ONNXSpec.md)
- - [V1alpha2PredictorSpec](docs/V1alpha2PredictorSpec.md)
- - [V1alpha2PyTorchSpec](docs/V1alpha2PyTorchSpec.md)
- - [V1alpha2SKLearnSpec](docs/V1alpha2SKLearnSpec.md)
- - [V1alpha2StatusConfigurationSpec](docs/V1alpha2StatusConfigurationSpec.md)
- - [V1alpha2TritonSpec](docs/V1alpha2TritonSpec.md)
- - [V1alpha2TensorflowSpec](docs/V1alpha2TensorflowSpec.md)
- - [V1alpha2TransformerSpec](docs/V1alpha2TransformerSpec.md)
- - [V1alpha2XGBoostSpec](docs/V1alpha2XGBoostSpec.md)
  - [V1beta1AIXExplainerSpec](docs/V1beta1AIXExplainerSpec.md)
  - [V1beta1AlibiExplainerSpec](docs/V1beta1AlibiExplainerSpec.md)
  - [V1beta1Batcher](docs/V1beta1Batcher.md)

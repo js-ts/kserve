@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# The script is used to deploy knative and kfserving, and run e2e tests.
+# The script is used to deploy knative and kserve, and run e2e tests.
 
 set -o errexit
 set -o nounset
@@ -133,7 +133,7 @@ pip3 install pytest==6.0.2 pytest-xdist pytest-rerunfailures
 pip3 install --upgrade pytest-tornasync
 pip3 install urllib3==1.24.2
 pip3 install --upgrade setuptools
-pushd python/kfserving >/dev/null
+pushd python/kserve >/dev/null
     pip3 install -r requirements.txt
     python3 setup.py install --force --user
 popd
