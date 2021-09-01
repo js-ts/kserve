@@ -24,7 +24,7 @@ from ray import serve
 
 # the model handle name should match the model endpoint name
 @serve.deployment(name="custom-model", num_replicas=2)
-class AlexNetModel(kfserving.KFModel):
+class AlexNetModel(kserve.KFModel):
     def __init__(self):
         self.name = "custom-model"
         super().__init__(self.name)
