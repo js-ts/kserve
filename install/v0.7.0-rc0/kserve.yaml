@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    control-plane: kfserving-controller-manager
+    control-plane: kserve-controller-manager
     controller-tools.k8s.io: "1.0"
     istio-injection: disabled
   name: kserve
@@ -23,7 +23,7 @@ spec:
     webhookClientConfig:
       caBundle: Cg==
       service:
-        name: kfserving-webhook-server-service
+        name: kserve-webhook-server-service
         namespace: kserve
         path: /convert
   group: serving.kserve.io
@@ -16141,9 +16141,9 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app.kubernetes.io/component: kfserving-models-web-app
-    kustomize.component: kfserving-models-web-app
-  name: kfserving-models-web-app
+    app.kubernetes.io/component: kserve-models-web-app
+    kustomize.component: kserve-models-web-app
+  name: kserve-models-web-app
   namespace: kserve
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -16183,7 +16183,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   creationTimestamp: null
-  name: kfserving-manager-role
+  name: kserve-manager-role
 rules:
 - apiGroups:
   - admissionregistration.k8s.io
@@ -16394,9 +16394,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/component: kfserving-models-web-app
-    kustomize.component: kfserving-models-web-app
-  name: kfserving-models-web-app-cluster-role
+    app.kubernetes.io/component: kserve-models-web-app
+    kustomize.component: kserve-models-web-app
+  name: kserve-models-web-app-cluster-role
 rules:
 - apiGroups:
   - authorization.k8s.io
@@ -16446,7 +16446,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: kfserving-proxy-role
+  name: kserve-proxy-role
 rules:
 - apiGroups:
   - authentication.k8s.io
@@ -16478,11 +16478,11 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: kfserving-manager-rolebinding
+  name: kserve-manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kfserving-manager-role
+  name: kserve-manager-role
 subjects:
 - kind: ServiceAccount
   name: default
@@ -16492,26 +16492,26 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:
-    app.kubernetes.io/component: kfserving-models-web-app
-    kustomize.component: kfserving-models-web-app
-  name: kfserving-models-web-app-binding
+    app.kubernetes.io/component: kserve-models-web-app
+    kustomize.component: kserve-models-web-app
+  name: kserve-models-web-app-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kfserving-models-web-app-cluster-role
+  name: kserve-models-web-app-cluster-role
 subjects:
 - kind: ServiceAccount
-  name: kfserving-models-web-app
+  name: kserve-models-web-app
   namespace: kserve
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: kfserving-proxy-rolebinding
+  name: kserve-proxy-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kfserving-proxy-role
+  name: kserve-proxy-role
 subjects:
 - kind: ServiceAccount
   name: default
@@ -16599,7 +16599,7 @@ data:
         },
         "sklearn": {
           "v1": {
-            "image": "gcr.io/kfserving/sklearnserver",
+            "image": "kserve/sklearnserver",
             "defaultImageVersion": "latest",
             "supportedFrameworks": [
               "sklearn"
@@ -16617,7 +16617,7 @@ data:
         },
         "xgboost": {
           "v1": {
-            "image": "gcr.io/kfserving/xgbserver",
+            "image": "kserve/xgbserver",
             "defaultImageVersion": "latest",
             "supportedFrameworks": [
               "xgboost"
@@ -16635,7 +16635,7 @@ data:
         },
         "pytorch": {
           "v1" : {
-            "image": "gcr.io/kfserving/pytorchserver",
+            "image": "kserve/pytorchserver",
             "defaultImageVersion": "latest",
             "defaultGpuImageVersion": "latest-gpu",
             "supportedFrameworks": [
@@ -16645,8 +16645,8 @@ data:
           },
           "v2" : {
             "image": "pytorch/torchserve-kfs",
-            "defaultImageVersion": "0.4.0",
-            "defaultGpuImageVersion": "0.4.0-gpu",
+            "defaultImageVersion": "0.4.1",
+            "defaultGpuImageVersion": "0.4.1-gpu",
             "supportedFrameworks": [
               "pytorch"
             ],
@@ -16711,7 +16711,7 @@ data:
   ingressGateway: knative-serving/knative-ingress-gateway
 kind: ConfigMap
 metadata:
-  name: kfserving-config
+  name: kserve-config
   namespace: kserve
 ---
 apiVersion: v1
@@ -16720,15 +16720,15 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    app.kubernetes.io/component: kfserving-models-web-app
-    kustomize.component: kfserving-models-web-app
-  name: kfserving-models-web-app-config-9kkt28dhgb
+    app.kubernetes.io/component: kserve-models-web-app
+    kustomize.component: kserve-models-web-app
+  name: kserve-models-web-app-config-9kkt28dhgb
   namespace: kserve
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: kfserving-webhook-server-secret
+  name: kserve-webhook-server-secret
   namespace: kserve
 ---
 apiVersion: v1
@@ -16739,9 +16739,9 @@ metadata:
     prometheus.io/scheme: https
     prometheus.io/scrape: "true"
   labels:
-    control-plane: kfserving-controller-manager
+    control-plane: kserve-controller-manager
     controller-tools.k8s.io: "1.0"
-  name: kfserving-controller-manager-metrics-service
+  name: kserve-controller-manager-metrics-service
   namespace: kserve
 spec:
   ports:
@@ -16749,31 +16749,31 @@ spec:
     port: 8443
     targetPort: https
   selector:
-    control-plane: kfserving-controller-manager
+    control-plane: kserve-controller-manager
     controller-tools.k8s.io: "1.0"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    control-plane: kfserving-controller-manager
+    control-plane: kserve-controller-manager
     controller-tools.k8s.io: "1.0"
-  name: kfserving-controller-manager-service
+  name: kserve-controller-manager-service
   namespace: kserve
 spec:
   ports:
   - port: 443
   selector:
-    control-plane: kfserving-controller-manager
+    control-plane: kserve-controller-manager
     controller-tools.k8s.io: "1.0"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/component: kfserving-models-web-app
-    kustomize.component: kfserving-models-web-app
-  name: kfserving-models-web-app
+    app.kubernetes.io/component: kserve-models-web-app
+    kustomize.component: kserve-models-web-app
+  name: kserve-models-web-app
   namespace: kserve
 spec:
   ports:
@@ -16782,71 +16782,71 @@ spec:
     protocol: TCP
     targetPort: 5000
   selector:
-    app.kubernetes.io/component: kfserving-models-web-app
-    kustomize.component: kfserving-models-web-app
+    app.kubernetes.io/component: kserve-models-web-app
+    kustomize.component: kserve-models-web-app
   type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kfserving-webhook-server-service
+  name: kserve-webhook-server-service
   namespace: kserve
 spec:
   ports:
   - port: 443
     targetPort: webhook-server
   selector:
-    control-plane: kfserving-controller-manager
+    control-plane: kserve-controller-manager
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/component: kfserving-models-web-app
-    kustomize.component: kfserving-models-web-app
-  name: kfserving-models-web-app
+    app.kubernetes.io/component: kserve-models-web-app
+    kustomize.component: kserve-models-web-app
+  name: kserve-models-web-app
   namespace: kserve
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/component: kfserving-models-web-app
-      kustomize.component: kfserving-models-web-app
+      app.kubernetes.io/component: kserve-models-web-app
+      kustomize.component: kserve-models-web-app
   template:
     metadata:
       labels:
-        app.kubernetes.io/component: kfserving-models-web-app
-        kustomize.component: kfserving-models-web-app
+        app.kubernetes.io/component: kserve-models-web-app
+        kustomize.component: kserve-models-web-app
     spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: kfserving-models-web-app-config-9kkt28dhgb
-        image: kfserving/models-web-app:v0.7.0-rc0
+            name: kserve-models-web-app-config-9kkt28dhgb
+        image: andyarok/models-web-app:v0.7.0-rc0
         imagePullPolicy: Always
-        name: kfserving-models-web-app
+        name: kserve-models-web-app
         ports:
         - containerPort: 5000
-      serviceAccountName: kfserving-models-web-app
+      serviceAccountName: kserve-models-web-app
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    control-plane: kfserving-controller-manager
+    control-plane: kserve-controller-manager
     controller-tools.k8s.io: "1.0"
-  name: kfserving-controller-manager
+  name: kserve-controller-manager
   namespace: kserve
 spec:
   selector:
     matchLabels:
-      control-plane: kfserving-controller-manager
+      control-plane: kserve-controller-manager
       controller-tools.k8s.io: "1.0"
   serviceName: controller-manager-service
   template:
     metadata:
       labels:
-        control-plane: kfserving-controller-manager
+        control-plane: kserve-controller-manager
         controller-tools.k8s.io: "1.0"
     spec:
       containers:
@@ -16860,8 +16860,8 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: SECRET_NAME
-          value: kfserving-webhook-server-cert
-        image: gcr.io/kfserving/kfserving-controller:v0.7.0-rc0
+          value: kserve-webhook-server-cert
+        image: kserve/kserve-controller:v0.7.0-rc0
         imagePullPolicy: Always
         name: manager
         ports:
@@ -16894,7 +16894,7 @@ spec:
       - name: cert
         secret:
           defaultMode: 420
-          secretName: kfserving-webhook-server-cert
+          secretName: kserve-webhook-server-cert
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
@@ -16902,13 +16902,13 @@ metadata:
   name: serving-cert
   namespace: kserve
 spec:
-  commonName: kfserving-webhook-server-service.kserve.svc
+  commonName: kserve-webhook-server-service.kserve.svc
   dnsNames:
-  - kfserving-webhook-server-service.kserve.svc
+  - kserve-webhook-server-service.kserve.svc
   issuerRef:
     kind: Issuer
     name: selfsigned-issuer
-  secretName: kfserving-webhook-server-cert
+  secretName: kserve-webhook-server-cert
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
@@ -16922,9 +16922,9 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   labels:
-    app.kubernetes.io/component: kfserving-models-web-app
-    kustomize.component: kfserving-models-web-app
-  name: kfserving-models-web-app
+    app.kubernetes.io/component: kserve-models-web-app
+    kustomize.component: kserve-models-web-app
+  name: kserve-models-web-app
   namespace: kserve
 spec:
   gateways:
@@ -16939,7 +16939,7 @@ spec:
       uri: /
     route:
     - destination:
-        host: kfserving-models-web-app.kserve.svc.cluster.local
+        host: kserve-models-web-app.kserve.svc.cluster.local
         port:
           number: 80
 ---
@@ -16953,11 +16953,11 @@ webhooks:
 - clientConfig:
     caBundle: Cg==
     service:
-      name: kfserving-webhook-server-service
+      name: kserve-webhook-server-service
       namespace: kserve
       path: /mutate-serving-kserve-io-v1alpha2-inferenceservice
   failurePolicy: Fail
-  name: inferenceservice.kfserving-webhook-server.defaulter
+  name: inferenceservice.kserve-webhook-server.defaulter
   rules:
   - apiGroups:
     - serving.kserve.io
@@ -16971,11 +16971,11 @@ webhooks:
 - clientConfig:
     caBundle: Cg==
     service:
-      name: kfserving-webhook-server-service
+      name: kserve-webhook-server-service
       namespace: kserve
       path: /mutate-serving-kserve-io-v1beta1-inferenceservice
   failurePolicy: Fail
-  name: inferenceservice.kfserving-webhook-server.v1beta1.defaulter
+  name: inferenceservice.kserve-webhook-server.v1beta1.defaulter
   rules:
   - apiGroups:
     - serving.kserve.io
@@ -16989,11 +16989,11 @@ webhooks:
 - clientConfig:
     caBundle: Cg==
     service:
-      name: kfserving-webhook-server-service
+      name: kserve-webhook-server-service
       namespace: kserve
       path: /mutate-pods
   failurePolicy: Fail
-  name: inferenceservice.kfserving-webhook-server.pod-mutator
+  name: inferenceservice.kserve-webhook-server.pod-mutator
   namespaceSelector:
     matchExpressions:
     - key: control-plane
@@ -17023,11 +17023,11 @@ webhooks:
 - clientConfig:
     caBundle: Cg==
     service:
-      name: kfserving-webhook-server-service
+      name: kserve-webhook-server-service
       namespace: kserve
       path: /validate-serving-kserve-io-v1alpha2-inferenceservice
   failurePolicy: Fail
-  name: inferenceservice.kfserving-webhook-server.validator
+  name: inferenceservice.kserve-webhook-server.validator
   rules:
   - apiGroups:
     - serving.kserve.io
@@ -17041,11 +17041,11 @@ webhooks:
 - clientConfig:
     caBundle: Cg==
     service:
-      name: kfserving-webhook-server-service
+      name: kserve-webhook-server-service
       namespace: kserve
       path: /validate-serving-kserve-io-v1beta1-inferenceservice
   failurePolicy: Fail
-  name: inferenceservice.kfserving-webhook-server.v1beta1.validator
+  name: inferenceservice.kserve-webhook-server.v1beta1.validator
   rules:
   - apiGroups:
     - serving.kserve.io
@@ -17067,11 +17067,11 @@ webhooks:
 - clientConfig:
     caBundle: Cg==
     service:
-      name: kfserving-webhook-server-service
+      name: kserve-webhook-server-service
       namespace: kserve
       path: /validate-serving-kserve-io-v1alpha1-trainedmodel
   failurePolicy: Fail
-  name: trainedmodel.kfserving-webhook-server.validator
+  name: trainedmodel.kserve-webhook-server.validator
   rules:
   - apiGroups:
     - serving.kserve.io

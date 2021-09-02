@@ -24,7 +24,7 @@ from kserve import constants
 logging.basicConfig(level=logging.INFO)
 
 KSERVE_NAMESPACE = "kserve"
-KSERVE_TEST_NAMESPACE = "kfserving-ci-e2e-test"
+KSERVE_TEST_NAMESPACE = "kserve-ci-e2e-test"
 
 
 def predict(service_name, input_json, protocol_version="v1",
