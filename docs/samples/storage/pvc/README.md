@@ -8,7 +8,7 @@ Refer to the [document](https://kubernetes.io/docs/concepts/storage/persistent-v
 
 ## Training model
 
-Follow the mnist example [guide](https://github.com/kubeflow/fairing/blob/master/examples/mnist/mnist_e2e_on_prem.ipynb) to train a mnist model and store it to PVC. The InferenceService is deployed in the notebook example by `Kubeflow Fairing` that uses `kfserving` SDK. If you want to apply the InferenceService via kubectl by using the YAML format as below, no need to run the deployment step in the notebook. In this example, the relative path of model will be `./export/` on the PVC.
+Follow the mnist example [guide](https://github.com/kubeflow/fairing/blob/master/examples/mnist/mnist_e2e_on_prem.ipynb) to train a mnist model and store it to PVC. The InferenceService is deployed in the notebook example by `Kubeflow Fairing` that uses `kserve` SDK. If you want to apply the InferenceService via kubectl by using the YAML format as below, no need to run the deployment step in the notebook. In this example, the relative path of model will be `./export/` on the PVC.
 
 ## Create the InferenceService
 
@@ -19,13 +19,13 @@ kubectl apply -f mnist-pvc.yaml
 
 Expected Output
 ```
-$ inferenceservice.serving.kubeflow.org/mnist-sample configured
+$ inferenceservice.serving.kserve.io/mnist-sample configured
 ```
 
 ## Check the InferenceService
 
 ```bash
 $ kubectl get inferenceservice
-NAME           URL                                                               READY     DEFAULT TRAFFIC   CANARY TRAFFIC   AGE
-mnist-sample   http://mnist-sample.kubeflow.example.com/v1/models/mnist-sample   True      100                                1m
+NAME               URL                                           READY   PREV   LATEST   PREVROLLEDOUTREVISION   LATESTREADYREVISION                        AGE
+mnist-sample   http://mnist-sample.default.example.com   True           100                              mnist-sample-predictor-default-00001   1m
 ```

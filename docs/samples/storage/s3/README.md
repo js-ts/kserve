@@ -1,11 +1,11 @@
 # Predict on a InferenceService with saved model on S3
 ## Setup
-1. Your ~/.kube/config should point to a cluster with [KFServing installed](https://github.com/kubeflow/kfserving/#install-kfserving).
+1. Your ~/.kube/config should point to a cluster with [Kserve installed](https://github.com/kserve/kserve/#install-kserve).
 2. Your cluster's Istio Ingress gateway must be [network accessible](https://istio.io/latest/docs/tasks/traffic-management/ingress/ingress-control/).
 3. Your cluster's Istio Egresss gateway must [allow accessing S3 Storage](https://knative.dev/docs/serving/outbound-network-access/)
 
 ## Create S3 Secret and attach to Service Account
-Create a secret with your [S3 user credential](https://console.aws.amazon.com/iam/home#/users), `KFServing` reads the secret annotations to inject 
+Create a secret with your [S3 user credential](https://console.aws.amazon.com/iam/home#/users), `Kserve` reads the secret annotations to inject 
 the S3 environment variables on storage initializer or model agent to download the models from S3 storage. 
 ```yaml
 apiVersion: v1
@@ -13,10 +13,10 @@ kind: Secret
 metadata:
   name: mysecret
   annotations:
-     serving.kubeflow.org/s3-endpoint: s3.amazonaws.com # replace with your s3 endpoint e.g minio-service.kubeflow:9000 
-     serving.kubeflow.org/s3-usehttps: "1" # by default 1, if testing with minio you can set to 0
-     serving.kubeflow.org/s3-region: "us-east-2"
-     serving.kubeflow.org/s3-useanoncredential: "false" # omitting this is the same as false, if true will ignore provided credential and use anonymous credentials
+     serving.kserve.io/s3-endpoint: s3.amazonaws.com # replace with your s3 endpoint e.g minio-service.kubeflow:9000 
+     serving.kserve.io/s3-usehttps: "1" # by default 1, if testing with minio you can set to 0
+     serving.kserve.io/s3-region: "us-east-2"
+     serving.kserve.io/s3-useanoncredential: "false" # omitting this is the same as false, if true will ignore provided credential and use anonymous credentials
 type: Opaque
 stringData: # use `stringData` for raw credential string or `data` for base64 encoded string
   AWS_ACCESS_KEY_ID: XXXX
@@ -24,7 +24,7 @@ stringData: # use `stringData` for raw credential string or `data` for base64 en
 ```
 
 The next step is to attach the created secret to the service account's secret list.
-By default `KFServing` uses `default` service account, you can create your own service account and overwrite on `InferenceService` CRD.
+By default `Kserve` uses `default` service account, you can create your own service account and overwrite on `InferenceService` CRD.
 
 ```yaml
 apiVersion: v1
@@ -40,7 +40,7 @@ Apply the secret and service account
 kubectl apply -f s3_secret.yaml
 ```
 
-Note: if you are running kfserving with istio sidecars enabled, there can be a race condition between the istio proxy being ready and the agent pulling models. 
+Note: if you are running kserve with istio sidecars enabled, there can be a race condition between the istio proxy being ready and the agent pulling models. 
 This will result in a `tcp dial connection refused` error when the agent tries to download from s3.
 To resolve it, istio allows the blocking of other containers in a pod until the proxy container is ready. 
 You can enabled this by setting `proxy.holdApplicationUntilProxyStarts: true` in `istio-sidecar-injector` configmap,
@@ -49,7 +49,7 @@ You can enabled this by setting `proxy.holdApplicationUntilProxyStarts: true` in
 ## Create the InferenceService
 Create the InferenceService with the s3 `storageUri` and the service account with s3 credential attached.
 ```yaml
-apiVersion: "serving.kubeflow.org/v1beta1"
+apiVersion: "serving.kserve.io/v1beta1"
 kind: "InferenceService"
 metadata:
   name: "mnist-s3"
@@ -57,7 +57,7 @@ spec:
   predictor:
     serviceAccountName: sa
     tensorflow:
-      storageUri: "s3://kfserving-examples/mnist"
+      storageUri: "s3://kserve-examples/mnist"
 ```
 
 ```bash
@@ -66,7 +66,7 @@ kubectl apply -f tensorflow_s3.yaml
 
 Expected Output
 ```
-$ inferenceservice.serving.kubeflow.org/mnist-s3 created
+$ inferenceservice.serving.kserve.io/mnist-s3 created
 ```
 
 ## Run a prediction
