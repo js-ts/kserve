@@ -47,7 +47,7 @@ def test_transformer():
     transformer = V1beta1TransformerSpec(
         min_replicas=1,
         containers=[V1Container(
-                      image='809251082950.dkr.ecr.us-west-2.amazonaws.com/kfserving/image-transformer:latest',
+                      image='809251082950.dkr.ecr.us-west-2.amazonaws.com/kserve/image-transformer:latest',
                       name='kserve-container',
                       resources=V1ResourceRequirements(
                           requests={'cpu': '100m', 'memory': '256Mi'},
