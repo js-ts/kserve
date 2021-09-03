@@ -121,6 +121,7 @@ make deploy-ci
 
 echo "Waiting for KFServing started ..."
 kubectl wait --for=condition=Ready pods --all --timeout=180s -n kserve
+kubectl get events -A
 
 echo "Creating a namespace kserve-ci-test ..."
 kubectl create namespace kserve-ci-e2e-test
