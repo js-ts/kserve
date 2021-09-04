@@ -31,13 +31,7 @@ setup(
     python_requires='>=3.6',
     packages=find_packages("transformer"),
     install_requires=[
-        "kfserving>=0.6.0",
-        "argparse>=1.4.0",
-        "requests>=2.22.0",
-        "joblib>=0.13.2",
-        "pandas>=0.24.2",
-        "numpy>=1.16.3",
-        "kubernetes >= 9.0.0",
+        "kserve>=0.7.0rc0",
         "torchvision>=0.4.1",
         "pillow==8.1.1"
     ],
