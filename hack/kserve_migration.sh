@@ -38,7 +38,6 @@ isControllerRunning() {
 # Checks whether the kfserving is running or not
 isControllerRunning kfserving-system
 
-
 # Get inference services config
 echo "getting inference services config"
 inference_services=$(kubectl get isvc -A -o jsonpath='{.items[*].metadata.namespace},{.items[*].metadata.name}')
@@ -69,16 +68,10 @@ if [ ! -z "$knative_services" ]; then
 fi
 ksvc_count=${#ksvc_names[@]}
 
-if [ $isvc_count != $ksvc_count ]; then
-    echo "error: inference and knative services counts should be equal."
-    exit 1;
-fi
-
 # Deploy kserve
 echo "deploying kserve"
 cd ..
-KSERVE_CONFIG=kfserving.yaml
-if [ ${KSERVE_VERSION:3:1} -gt 6 ]; then KSERVE_CONFIG=kserve.yaml; fi
+KSERVE_CONFIG=kserve.yaml
 for i in 1 2 3 4 5 ; do kubectl apply -f install/${KSERVE_VERSION}/${KSERVE_CONFIG} && break || sleep 15; done
 kubectl wait --for=condition=ready --timeout=120s po --all -n kserve
 isControllerRunning kserve
@@ -92,6 +85,13 @@ for (( i=0; i<${ksvc_count}; i++ ));
 do
     ksvc_isvc_map[${ksvc_names[$i]}]=$(kubectl get ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} -o json | jq --raw-output '.metadata.ownerReferences[0].name')
     kubectl patch ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} --type json -p='[{"op": "remove", "path": "/metadata/ownerReferences"}]'
+done
+
+# Remove owner references from virtual services
+echo "removing owner references from virtual services"
+for (( i=0; i<${isvc_count}; i++ ));
+do
+    kubectl patch virtualservices ${isvc_names[$i]} -n ${isvc_ns[$i]} --type json -p='[{"op": "remove", "path": "/metadata/ownerReferences"}]'
 done
 sleep 5
 
@@ -126,6 +126,14 @@ do
     isvc_name=${ksvc_isvc_map[${ksvc_names[$i]}]}
     isvc_uid=${infr_uid_map[${isvc_name}]}
     kubectl patch ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} --type='json' -p='[{"op": "add", "path": "/metadata/ownerReferences", "value": [{"apiVersion": "serving.kserve.io/v1beta1","blockOwnerDeletion": true,"controller": true,"kind": "InferenceService","name": "'${isvc_name}'","uid": "'${isvc_uid}'"}] }]'
+done
+
+# Update virtual services with new owner reference
+echo "updating virtual services with new owner reference"
+for (( i=0; i<${isvc_count}; i++ ));
+do
+    isvc_uid=${infr_uid_map[${isvc_names[$i]}]}
+    kubectl patch virtualservices ${isvc_names[$i]} -n ${isvc_ns[$i]} --type='json' -p='[{"op": "add", "path": "/metadata/ownerReferences", "value": [{"apiVersion": "serving.kserve.io/v1beta1","blockOwnerDeletion": true,"controller": true,"kind": "InferenceService","name": "'${isvc_names[$i]}'","uid": "'${isvc_uid}'"}] }]'
 done
 sleep 5
 
