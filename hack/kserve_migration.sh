@@ -83,15 +83,21 @@ echo "removing owner references from knative services"
 declare -A ksvc_isvc_map
 for (( i=0; i<${ksvc_count}; i++ ));
 do
-    ksvc_isvc_map[${ksvc_names[$i]}]=$(kubectl get ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} -o json | jq --raw-output '.metadata.ownerReferences[0].name')
-    kubectl patch ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} --type json -p='[{"op": "remove", "path": "/metadata/ownerReferences"}]'
+    ksvc_api_version=$(kubectl get ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} -o json | jq --raw-output '.metadata.ownerReferences[0].apiVersion')
+    if [ "$ksvc_api_version" == "serving.kubeflow.org/v1beta1" ]; then
+        ksvc_isvc_map[${ksvc_names[$i]}]=$(kubectl get ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} -o json | jq --raw-output '.metadata.ownerReferences[0].name')
+        kubectl patch ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} --type json -p='[{"op": "remove", "path": "/metadata/ownerReferences"}]'
+    fi
 done
 
 # Remove owner references from virtual services
 echo "removing owner references from virtual services"
 for (( i=0; i<${isvc_count}; i++ ));
 do
-    kubectl patch virtualservices ${isvc_names[$i]} -n ${isvc_ns[$i]} --type json -p='[{"op": "remove", "path": "/metadata/ownerReferences"}]'
+    vsvc_api_version=$(kubectl get virtualservices ${isvc_names[$i]} -n ${isvc_ns[$i]} -o json | jq --raw-output '.metadata.ownerReferences[0].apiVersion')
+    if [ "$vsvc_api_version" == "serving.kubeflow.org/v1beta1" ]; then
+        kubectl patch virtualservices ${isvc_names[$i]} -n ${isvc_ns[$i]} --type json -p='[{"op": "remove", "path": "/metadata/ownerReferences"}]'
+    fi
 done
 sleep 5
 
@@ -123,17 +129,23 @@ done
 echo "updating knative services with new owner reference"
 for (( i=0; i<${ksvc_count}; i++ ));
 do
-    isvc_name=${ksvc_isvc_map[${ksvc_names[$i]}]}
-    isvc_uid=${infr_uid_map[${isvc_name}]}
-    kubectl patch ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} --type='json' -p='[{"op": "add", "path": "/metadata/ownerReferences", "value": [{"apiVersion": "serving.kserve.io/v1beta1","blockOwnerDeletion": true,"controller": true,"kind": "InferenceService","name": "'${isvc_name}'","uid": "'${isvc_uid}'"}] }]'
+    owner_ref_count=$(kubectl get ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} -o json | jq --raw-output '.metadata.ownerReferences | length')
+    if [ $owner_ref_count -eq 0 ]; then
+        isvc_name=${ksvc_isvc_map[${ksvc_names[$i]}]}
+        isvc_uid=${infr_uid_map[${isvc_name}]}
+        kubectl patch ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} --type='json' -p='[{"op": "add", "path": "/metadata/ownerReferences", "value": [{"apiVersion": "serving.kserve.io/v1beta1","blockOwnerDeletion": true,"controller": true,"kind": "InferenceService","name": "'${isvc_name}'","uid": "'${isvc_uid}'"}] }]'
+    fi
 done
 
 # Update virtual services with new owner reference
 echo "updating virtual services with new owner reference"
 for (( i=0; i<${isvc_count}; i++ ));
 do
-    isvc_uid=${infr_uid_map[${isvc_names[$i]}]}
-    kubectl patch virtualservices ${isvc_names[$i]} -n ${isvc_ns[$i]} --type='json' -p='[{"op": "add", "path": "/metadata/ownerReferences", "value": [{"apiVersion": "serving.kserve.io/v1beta1","blockOwnerDeletion": true,"controller": true,"kind": "InferenceService","name": "'${isvc_names[$i]}'","uid": "'${isvc_uid}'"}] }]'
+    owner_ref_count=$(kubectl get virtualservices ${isvc_names[$i]} -n ${isvc_ns[$i]} -o json | jq --raw-output '.metadata.ownerReferences | length')
+    if [ $owner_ref_count -eq 0 ]; then
+        isvc_uid=${infr_uid_map[${isvc_names[$i]}]}
+        kubectl patch virtualservices ${isvc_names[$i]} -n ${isvc_ns[$i]} --type='json' -p='[{"op": "add", "path": "/metadata/ownerReferences", "value": [{"apiVersion": "serving.kserve.io/v1beta1","blockOwnerDeletion": true,"controller": true,"kind": "InferenceService","name": "'${isvc_names[$i]}'","uid": "'${isvc_uid}'"}] }]'
+    fi
 done
 sleep 5
 
@@ -144,18 +156,23 @@ do
     kubectl delete inferenceservice.serving.kubeflow.org ${isvc_names[$i]} -n ${isvc_ns[$i]}
 done
 
-# Update apiversion in knative services
-echo "updating apiversion in knative services"
-for (( i=0; i<${ksvc_count}; i++ ));
-do
-    kubectl get ksvc ${ksvc_names[$i]} -n ${ksvc_ns[$i]} -o yaml > "${KSVC_CONFIG_DIR}/${ksvc_names[$i]}.yaml"
-    sed -i -- 's/kubeflow.org/kserve.io/g' "${KSVC_CONFIG_DIR}/${ksvc_names[$i]}.yaml"
-    kubectl apply -f "${KSVC_CONFIG_DIR}/${ksvc_names[$i]}.yaml"
-done
-
 # Clean up kfserving
 echo "deleting kfserving namespace"
 kubectl delete ns kfserving-system
+
+echo "deleting kfserving cluster role and cluster role binding"
+kubectl delete ClusterRoleBinding kfserving-manager-rolebinding
+kubectl delete ClusterRoleBinding kfserving-models-web-app-binding
+kubectl delete ClusterRoleBinding kfserving-proxy-rolebinding
+
+echo "deleting kfserving webhook configuration and crd"
+kubectl delete CustomResourceDefinition inferenceservices.serving.kubeflow.org
+kubectl delete CustomResourceDefinition trainedmodels.serving.kubeflow.org
+
+kubectl delete MutatingWebhookConfiguration inferenceservice.serving.kubeflow.org
+kubectl delete ValidatingWebhookConfiguration inferenceservice.serving.kubeflow.org
+kubectl delete ValidatingWebhookConfiguration trainedmodel.serving.kubeflow.org
+
 rm -rf ${CONFIG_DIR}
 
 echo "kserve migration completed successfully"
